@@ -69,6 +69,8 @@
 // }
 
 
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Todo {
@@ -103,6 +105,10 @@ class Todo {
       'createdAt': Timestamp.fromDate(createdAt), // Convert DateTime to Firestore Timestamp
     };
   }
+
+    String toJson() {
+  return jsonEncode(toMap());
+}
 
   // CopyWith method to create a copy of the Todo with modified fields
   Todo copyWith({

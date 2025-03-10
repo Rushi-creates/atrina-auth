@@ -1,5 +1,6 @@
 // lib/screens/home_screen.dart
 import 'package:auth_app1/features/auth/domain/repos.dart';
+import 'package:auth_app1/features/auth/domain/utils/common_functions.dart';
 import 'package:auth_app1/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:auth_app1/features/auth/presentation/controllers/profile_controller.dart';
 import 'package:auth_app1/features/auth/presentation/screens/create_todo_screen.dart';
@@ -30,8 +31,10 @@ class HomeScreen extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () async {
-              await authController.logout();
+              // await authController.logout();
               await userProfileSpRepo.remove();
+              setInitialScreen();
+              
             },
             icon: Icon(Icons.logout),
           ),

@@ -39,7 +39,7 @@ class SharedPreferencesHelper {
     if (value is double) {
       return await sharedPreferences.setDouble(_keyname, value);
     } else {
-      return await sharedPreferences.setString(_keyname, value.toMap());
+      return await sharedPreferences.setString(_keyname, value.toJson());
     }
   }
 

@@ -37,11 +37,11 @@ class PhoneLoginScreen extends StatelessWidget {
                   passwordController.text,
                 );
 
-                // await profileController.saveProfile(
-                //   emailController.text,
-                //   emailController.text,
-                //   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSEriWalt3rgigUMC63Bhg4viP_gHy3dHBidlLGVY2ds5rcQO90qjHgXs&s',
-                // );
+                await profileController.saveProfile(
+                  emailController.text,
+                  passwordController.text,
+                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSEriWalt3rgigUMC63Bhg4viP_gHy3dHBidlLGVY2ds5rcQO90qjHgXs&s',
+                );
               },
               child: Text("Login"),
             ),

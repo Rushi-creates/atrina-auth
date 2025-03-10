@@ -1,3 +1,4 @@
+import 'package:auth_app1/features/auth/domain/repos.dart';
 import 'package:auth_app1/features/auth/domain/shared_preference_helper.dart';
 import 'package:auth_app1/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:auth_app1/features/auth/presentation/controllers/profile_controller.dart';
@@ -18,6 +19,9 @@ void main() async {
 );
   Get.put(AuthController());
   Get.put(ProfileController());
+
+  var store = await userProfileSpRepo.get();
+  print(store);
   runApp(const MainApp());
 }
 

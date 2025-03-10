@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class UserProfile {
   String id;
   String name;
@@ -21,10 +23,18 @@ class UserProfile {
     };
   }
 
+  String toJson() {
+    return jsonEncode(toMap());
+  }
+
+  // Create a User object from a JSON String
+  factory UserProfile.fromJson(String source) {
+    return UserProfile.fromMap(jsonDecode(source));
+  }
   // Create a UserProfile from a Map
-  factory UserProfile.fromMap(Map<String, dynamic> map, String documentId) {
+  factory UserProfile.fromMap(Map<String, dynamic> map) {
     return UserProfile(
-      id: documentId,
+      id: map['name'],
       name: map['name'],
       bio: map['bio'],
       profilePictureUrl:

@@ -1,6 +1,7 @@
 import 'package:auth_app1/features/auth/data/models/profile.dart';
 import 'package:auth_app1/features/auth/domain/repos.dart';
 import 'package:auth_app1/features/auth/domain/shared_preference_helper.dart';
+import 'package:auth_app1/features/auth/domain/utils/common_functions.dart';
 import 'package:auth_app1/features/auth/presentation/screens/home_screen.dart';
 import 'package:auth_app1/features/auth/presentation/screens/login_screen.dart';
 import 'package:auth_app1/features/auth/presentation/screens/phone_login_screen.dart';
@@ -14,8 +15,9 @@ class AuthController extends GetxController {
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
+  var user = Rx<UserProfile?>(null);
 
-  var user = Rx<User?>(null);
+  var spUser;
 
   // @override
   // void onReady() {
@@ -24,22 +26,24 @@ class AuthController extends GetxController {
   //   ever(user, _setInitialScreen);
   // }
 
-    @override
+  @override
   void onReady() {
     super.onReady();
-    user.bindStream(auth.authStateChanges());
-    ever(user, _setInitialScreen);
+    spUser = setInitialScreen();
+
+    // user.bindStream(auth.authStateChanges());
+    // ever(user, _setInitialScreen);
   }
 
-  _setInitialScreen(User? user) {
-
-
-    if (user == null) {
-      Get.offAll(() => PhoneLoginScreen());
-    } else {
-      Get.offAll(() => HomeScreen());
-    }
-  }
+  // setInitialScreen() async {
+  //   var spUser = await userProfileSpRepo.get();
+  //   if (spUser == null) {
+  //     Get.offAll(() => PhoneLoginScreen());
+  //   } else {
+  //     Get.offAll(() => HomeScreen());
+  //   }
+  //   return spUser;
+  // }
 
   Future<void> register(String email, String password) async {
     try {
@@ -64,10 +68,40 @@ class AuthController extends GetxController {
   }
 
   Future<void> registerWithPhone(String number, String password) async {
-    Map<String, dynamic> userMap = {'number': number, 'password': password};
     try {
-      // await firestore.collection('numberProfiles').doc().set(userMap);
-      await userProfileSpRepo.set(userMap);
+      // Check if user already exists
+      var userDoc =
+          await firestore
+              .collection('numberProfiles')
+              .where('number', isEqualTo: number)
+              .get();
+
+      if (userDoc.docs.isNotEmpty) {
+        // User already exists, prompt to log in
+        Get.snackbar(
+          "Account Exists",
+          "An account with this number already exists. Please log in.",
+          backgroundColor: Colors.orange,
+          colorText: Colors.white,
+        );
+        return;
+      }
+
+      // User doesn't exist, proceed with registration
+      Map<String, dynamic> userMap = {'number': number, 'password': password};
+
+      UserProfile userProfile = UserProfile(
+        id: number,
+        name: number,
+        bio: password,
+        profilePictureUrl:
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkoKnnYEns44I5HqlyDuoHdesuKqwLV9dRk28IqUbguJudG7-eAQKYacIzUJEgwNQoLD5Y&s',
+      );
+
+      await firestore.collection('numberProfiles').doc(number).set(userMap);
+      await userProfileSpRepo.set(userProfile);
+      await setInitialScreen();
+
       Get.snackbar(
         "Success",
         "Account created successfully!",
@@ -98,11 +132,46 @@ class AuthController extends GetxController {
   }
 
   Future<void> loginWithPhone(String number, String password) async {
-    Map<String, dynamic> userMap = {'number': number, 'password': password};
-
     try {
-      // await auth.signInWithEmailAndPassword(email: email, password: password);
-      await userProfileSpRepo.set(userMap);
+      // Reference to the Firestore collection
+      var userDoc =
+          await firestore
+              .collection('numberProfiles')
+              .where('number', isEqualTo: number)
+              .get();
+
+      // Check if user exists
+      if (userDoc.docs.isNotEmpty) {
+        // User exists, proceed with authentication
+        Map<String, dynamic> userData = userDoc.docs.first.data();
+
+        if (userData['password'] == password) {
+          UserProfile userProfile = UserProfile(
+            id: userDoc.docs.first.id, // Assign document ID
+            name: number,
+            bio: password,
+            profilePictureUrl:
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkoKnnYEns44I5HqlyDuoHdesuKqwLV9dRk28IqUbguJudG7-eAQKYacIzUJEgwNQoLD5Y&s',
+          );
+
+          await userProfileSpRepo.set(userProfile);
+          await setInitialScreen();
+        } else {
+          Get.snackbar(
+            "Error",
+            "Incorrect password",
+            backgroundColor: Colors.red,
+            colorText: Colors.white,
+          );
+        }
+      } else {
+        Get.snackbar(
+          "Error",
+          "User does not exist",
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      }
     } catch (e) {
       Get.snackbar(
         "Error",
