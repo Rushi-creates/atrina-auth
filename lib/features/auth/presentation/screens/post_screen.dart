@@ -10,7 +10,7 @@ class PostView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Posts")),
+      appBar: AppBar(title: const Text("Api Posts")),
       body: Obx(() {
         if (controller.status.value.isLoading) {
           return const Center(child: CircularProgressIndicator());

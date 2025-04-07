@@ -106,3 +106,43 @@ class MainApp extends StatelessWidget {
    
   }
 }
+
+
+// import 'package:auth_app1/features/auth/presentation/bindings/country_binding.dart';
+// import 'package:auth_app1/features/auth/presentation/screens/country_view.dart';
+// import 'package:flutter/material.dart';
+// import 'package:get/get.dart';
+// import 'package:graphql_flutter/graphql_flutter.dart';
+
+// void main() async {
+//   await initHiveForFlutter();
+
+//   final HttpLink httpLink = HttpLink('https://countries.trevorblades.com/');
+
+//   ValueNotifier<GraphQLClient> client = ValueNotifier(
+//     GraphQLClient(
+//       link: httpLink,
+//       cache: GraphQLCache(store: HiveStore()),
+//     ),
+//   );
+
+//   runApp(
+//     GraphQLProvider(
+//       client: client,
+//       child: const MyApp(),
+//     ),
+//   );
+// }
+
+// class MyApp extends StatelessWidget {
+//   const MyApp();
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return GetMaterialApp(
+//       debugShowCheckedModeBanner: false,
+//       initialBinding: CountryBinding(),
+//       home: CountryView(),
+//     );
+//   }
+// }
