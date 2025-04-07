@@ -55,6 +55,7 @@
 import 'package:auth_app1/features/auth/domain/repos.dart';
 import 'package:auth_app1/features/auth/domain/shared_preference_helper.dart';
 import 'package:auth_app1/features/auth/presentation/controllers/auth_controller.dart';
+import 'package:auth_app1/features/auth/presentation/controllers/post_controller.dart';
 import 'package:auth_app1/features/auth/presentation/controllers/profile_controller.dart';
 import 'package:auth_app1/features/auth/presentation/controllers/theme_controller.dart';
 import 'package:auth_app1/features/auth/presentation/screens/login_screen.dart';
@@ -79,6 +80,7 @@ void main() async {
   Get.put(AuthController());
   Get.put(ProfileController());
    Get.put(ThemeController()); 
+   Get.put(PostController());
 
 
   var store = await userProfileSpRepo.get();

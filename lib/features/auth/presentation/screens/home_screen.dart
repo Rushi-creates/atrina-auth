@@ -18,6 +18,7 @@ class HomeScreen extends StatelessWidget {
   final AuthController authController = Get.find();
   final ProfileController profileController = Get.find();
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

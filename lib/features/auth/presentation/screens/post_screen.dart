@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class PostView extends StatelessWidget {
-  final PostController controller = Get.put(PostController());
+  final PostController controller = Get.find();
+
 
   @override
   Widget build(BuildContext context) {
