@@ -1,8 +1,18 @@
+import 'package:auth_app1/features/auth/presentation/controllers/theme_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
+  // const ProfilePage({super.key});
 
+  final ThemeController themeController = Get.find();
+
+  final List<String> themeNames = [
+    'Light Theme',
+    'Dark Theme',
+    'Blue Theme',
+    'Green Theme',
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,8 +27,8 @@ class ProfilePage extends StatelessWidget {
               // const Color.fromARGB(255, 252, 157, 14),
 
               // PINK + BLUE
-              const Color.fromARGB(255, 254, 110, 158),
-              const Color.fromARGB(255, 126, 214, 255),
+              const Color.fromARGB(255, 221, 21, 88),
+              const Color.fromARGB(255, 40, 113, 249),
             ],
           ),
         ),
@@ -27,12 +37,37 @@ class ProfilePage extends StatelessWidget {
             child: Stack(
               // alignment: AlignmentDirectional.center,
               children: [
-                Align(
-                  alignment: AlignmentDirectional.centerEnd,
-                  child: IconButton(
-                    icon: Icon(Icons.settings, color: Colors.white),
-                    onPressed: null,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.arrow_back_ios, color: Colors.white),
+                      onPressed: () => Get.back(),
+                    ),
+                    // IconButton(
+                    //   icon: Icon(Icons.settings, color: Colors.white),
+                    //   onPressed: null,
+                    // ),
+                    Obx(
+                      () => DropdownButton<int>(
+                        icon: Icon(Icons.settings, color: Colors.white),
+                        underline: SizedBox(),
+                        value: themeController.themeIndex,
+                        onChanged: (int? value) {
+                          if (value != null) {
+                            themeController.switchTheme(value);
+                          }
+                        },
+                        items: List.generate(
+                          themeNames.length,
+                          (index) => DropdownMenuItem(
+                            value: index,
+                            child: Text(themeNames[index]),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 ProfileCard(),
                 ProfileBody(),
@@ -96,29 +131,33 @@ class ProfileCard extends StatelessWidget {
 }
 
 class ProfileBody extends StatelessWidget {
-  const ProfileBody({super.key});
+  // const ProfileBody({super.key});
+  final ThemeController themeController = Get.find();
 
   @override
   Widget build(BuildContext context) {
     //white background card
-    return Container(
-      width: double.infinity,
-      height: 1000,
-      margin: const EdgeInsets.only(top: 170.0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(30),
-          topRight: Radius.circular(30),
+    return Obx(
+      () =>
+       Container(
+        width: double.infinity,
+        height: 1000,
+        margin: const EdgeInsets.only(top: 170.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(30),
+            topRight: Radius.circular(30),
+          ),
+          color: themeController.themes[themeController.themeIndex].cardColor,
+          // color: Colors.white,
         ),
-        color: Colors.white,
-        // color: Colors.white,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CommonSection(tile: ProfilePost(), headingText: "Top Picks"),
-          CommonSection(tile: DiscoveryPost(), headingText: "Discover more"),
-        ],
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CommonSection(tile: ProfilePost(), headingText: "Top Picks"),
+            CommonSection(tile: DiscoveryPost(), headingText: "Discover more"),
+          ],
+        ),
       ),
     );
   }

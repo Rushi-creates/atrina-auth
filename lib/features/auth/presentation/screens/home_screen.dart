@@ -5,6 +5,8 @@ import 'package:auth_app1/features/auth/presentation/controllers/auth_controller
 import 'package:auth_app1/features/auth/presentation/controllers/profile_controller.dart';
 import 'package:auth_app1/features/auth/presentation/screens/create_todo_screen.dart';
 import 'package:auth_app1/features/auth/presentation/screens/edit_todo_screen.dart';
+import 'package:auth_app1/features/auth/presentation/screens/post_screen.dart';
+import 'package:auth_app1/features/auth/presentation/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -29,6 +31,26 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
         actions: [
+           IconButton(
+            onPressed: () async {
+              Get.to(()=> PostView());
+              // await authController.logout();
+              // await userProfileSpRepo.remove();
+              // setInitialScreen();
+              
+            },
+            icon: Icon(Icons.pages),
+          ),
+          IconButton(
+            onPressed: () async {
+              Get.to(()=> ProfilePage());
+              // await authController.logout();
+              // await userProfileSpRepo.remove();
+              // setInitialScreen();
+              
+            },
+            icon: Icon(Icons.person),
+          ),
           IconButton(
             onPressed: () async {
               // await authController.logout();
