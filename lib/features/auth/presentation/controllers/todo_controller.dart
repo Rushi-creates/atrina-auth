@@ -1,110 +1,61 @@
-// // lib/controllers/todo_controller.dart
-// import 'package:auth_app1/features/auth/data/models/todo.dart';
-// import 'package:get/get.dart';
-// import 'package:cloud_firestore/cloud_firestore.dart';
 
-// class TodoController extends GetxController {
-//   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-//   var todos = <Todo>[].obs;
-
-//   @override
-//   void onInit() {
-//     super.onInit();
-//     fetchTodos();
-//   }
-
-//   void fetchTodos() {
-//     _firestore.collection('todos').snapshots().listen((snapshot) {
-//       todos.value = snapshot.docs
-//           .map((doc) => Todo.fromMap(doc.data(), doc.id))
-//           .toList();
-//     });
-//   }
-
-//   Future<void> addTodo(String title) async {
-//     await _firestore.collection('todos').add({
-//       'title': title,
-//       'isDone': false,
-//     });
-//   }
-
-//   Future<void> updateTodoStatus(String id, bool isDone) async {
-//     await _firestore.collection('todos').doc(id).update({'isDone': isDone});
-//   }
-
-//   Future<void> deleteTodo(String id) async {
-//     await _firestore.collection('todos').doc(id).delete();
-//   }
-// }
-
-import 'package:auth_app1/features/auth/data/models/profile.dart';
 import 'package:auth_app1/features/auth/data/models/todo.dart';
-import 'package:auth_app1/features/auth/domain/repos.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:uuid/uuid.dart';
 
 class TodoController extends GetxController {
   static TodoController instance = Get.find();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
+  
+  final String _boxName = 'todos';
+  late Box<Todo> _todoBox;
+  
   var todos = Rx<List<Todo>>([]);
-
+  
   int get todoCount => todos.value.length;
 
   @override
-  void onReady() {
-    super.onReady();
+  void onInit() {
+    super.onInit();
+    _initHive();
+  }
+
+  Future<void> _initHive() async {
+    _todoBox = await Hive.openBox<Todo>(_boxName);
     fetchTodos();
   }
 
-  void fetchTodos() async {
-    // User? currentUser = _auth.currentUser;
-    UserProfile? userSpProfile = await userProfileSpRepo.getModel();
-
-    if (userSpProfile != null) {
-      _firestore
-          .collection('todos')
-          .where('userId', isEqualTo: userSpProfile.id)
-          .snapshots()
-          .listen((snapshot) {
-            todos.value =
-                snapshot.docs.map((doc) {
-                  return Todo.fromMap(doc.data(), doc.id);
-                }).toList();
-          });
-    }
+  void fetchTodos() {
+    final todoList = _todoBox.values.toList();
+    todos.value = todoList;
+    // Sort by creation date (newest first)
+    todos.value.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+    update();
   }
 
   // Add a new todo
   Future<void> addTodo(String title) async {
     try {
-      // User? currentUser = _auth.currentUser;
-      UserProfile? userSpProfile = await userProfileSpRepo.getModel();
-
-      if (userSpProfile != null) {
-        await _firestore.collection('todos').add({
-          'title': title,
-          'isDone': false,
-          'userId': userSpProfile.id,
-          'createdAt': FieldValue.serverTimestamp(),
-        });
-
-        // Get.snackbar(
-        //   "Success",
-        //   "Todo added successfully!",
-        //   backgroundColor: Colors.green,
-        //   colorText: Colors.white,
-        // );
-      }
+      final newTodo = Todo(
+        id: const Uuid().v4(),
+        title: title,
+        createdAt: DateTime.now(),
+      );
+      
+      await _todoBox.put(newTodo.id, newTodo);
+      fetchTodos();
+      
+      Get.snackbar(
+        "Success",
+        "Todo added successfully!",
+        snackPosition: SnackPosition.BOTTOM,
+      );
     } catch (e) {
       Get.snackbar(
         "Error",
         "Failed to add todo: $e",
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
       );
     }
   }
@@ -112,84 +63,38 @@ class TodoController extends GetxController {
   // Update todo status
   Future<void> updateTodoStatus(String id, bool isDone) async {
     try {
-      await _firestore.collection('todos').doc(id).update({'isDone': isDone});
-
-      // Get.snackbar(
-      //   "Success",
-      //   "Todo status updated!",
-      //   backgroundColor: Colors.green,
-      //   colorText: Colors.white,
-      // );
+      final todo = _todoBox.get(id);
+      if (todo != null) {
+        final updatedTodo = todo.copyWith(isDone: isDone);
+        await _todoBox.put(id, updatedTodo);
+        fetchTodos();
+      }
     } catch (e) {
       Get.snackbar(
         "Error",
         "Failed to update status: $e",
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
       );
     }
   }
 
-  // Update todo status
-  // Future<void> updateWholeTodo(String oldTodoId, Todo newTodo) async {
-  //   try {
-  //     await _firestore.collection('todos').doc(oldTodoId).update({'isDone': newTodo.isDone ,
-  //     });
-
-  //     Get.snackbar("Success", "Todo status updated!",
-  //         backgroundColor: Colors.green, colorText: Colors.white);
-  //   } catch (e) {
-  //     Get.snackbar("Error", "Failed to update status: $e",
-  //         backgroundColor: Colors.red, colorText: Colors.white);
-  //   }
-  // }
-
   Future<void> updateWholeTodo(Todo oldTodo, Todo newTodo) async {
     try {
-      // Prepare a map for the updated fields
-      Map<String, dynamic> updatedFields = {};
-
-      // Check each field to see if it has changed
-      if (oldTodo.title != newTodo.title) {
-        updatedFields['title'] = newTodo.title;
-      }
-      if (oldTodo.isDone != newTodo.isDone) {
-        updatedFields['isDone'] = newTodo.isDone;
-      }
-      if (oldTodo.createdAt != newTodo.createdAt) {
-        updatedFields['createdAt'] = Timestamp.fromDate(newTodo.createdAt);
-      }
-
-      // If there are any updated fields, perform the update
-      if (updatedFields.isNotEmpty) {
-        await FirebaseFirestore.instance
-            .collection('todos')
-            .doc(oldTodo.id)
-            .update(updatedFields);
-
-        // Show success message
-        // Get.snackbar(
-        //   "Success",
-        //   "Todo updated successfully!",
-        //   backgroundColor: Colors.green,
-        //   colorText: Colors.white,
-        // );
-      } else {
-        // If no fields were updated
-        // Get.snackbar(
-        //   "No Changes",
-        //   "No changes were made to the Todo.",
-        //   backgroundColor: Colors.yellow,
-        //   colorText: Colors.black,
-        // );
+      // Check if anything has changed
+      bool hasChanges = false;
+      
+      if (oldTodo.title != newTodo.title) hasChanges = true;
+      if (oldTodo.isDone != newTodo.isDone) hasChanges = true;
+      
+      if (hasChanges) {
+        await _todoBox.put(oldTodo.id, newTodo);
+        fetchTodos();
       }
     } catch (e) {
-      // Handle errors and show failure message
       Get.snackbar(
         "Error",
         "Failed to update Todo: $e",
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
       );
     }
   }
@@ -197,20 +102,19 @@ class TodoController extends GetxController {
   // Delete a todo
   Future<void> deleteTodo(String id) async {
     try {
-      await _firestore.collection('todos').doc(id).delete();
-
-      // Get.snackbar(
-      //   "Success",
-      //   "Todo deleted successfully!",
-      //   backgroundColor: Colors.green,
-      //   colorText: Colors.white,
-      // );
+      await _todoBox.delete(id);
+      fetchTodos();
+      
+      Get.snackbar(
+        "Success",
+        "Todo deleted successfully!",
+        snackPosition: SnackPosition.BOTTOM,
+      );
     } catch (e) {
       Get.snackbar(
         "Error",
         "Failed to delete todo: $e",
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
       );
     }
   }

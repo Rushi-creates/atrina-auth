@@ -52,6 +52,7 @@
 
 
 // for AUTH APP
+import 'package:auth_app1/features/auth/data/models/todo.dart';
 import 'package:auth_app1/features/auth/domain/repos.dart';
 import 'package:auth_app1/features/auth/domain/shared_preference_helper.dart';
 import 'package:auth_app1/features/auth/presentation/controllers/auth_controller.dart';
@@ -66,11 +67,17 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:path_provider/path_provider.dart' as path_provider;
 
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // await Firebase.initializeApp();
+
+  final appDocumentDirectory = await path_provider.getApplicationDocumentsDirectory();
+  await Hive.initFlutter(appDocumentDirectory.path);
+  Hive.registerAdapter(TodoAdapter());
   
   await GetStorage.init(); 
   await SharedPreferencesHelper.init();
