@@ -40,6 +40,30 @@ android {
             signingConfig = signingConfigs.getByName("debug")
         }
     }
+
+    flavorDimensions += "version"
+
+    productFlavors {
+        create("dev") {
+            dimension = "version"
+            versionNameSuffix = "-dev"
+            manifestPlaceholders["appLabelName"] = "AuthApp Dev"
+        }
+        create("stage") {
+            dimension = "version"
+            versionNameSuffix = "-stage"
+            manifestPlaceholders["appLabelName"] = "AuthApp Stage"
+        }
+        create("qa") {
+            dimension = "version"
+            versionNameSuffix = "-qa"
+            manifestPlaceholders["appLabelName"] = "AuthApp QA"
+        }
+        create("prod") {
+            dimension = "version"
+            manifestPlaceholders["appLabelName"] = "AuthApp"
+        }
+    }
 }
 
 flutter {

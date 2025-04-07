@@ -1,9 +1,12 @@
+import 'package:auth_app1/config/flavor_config.dart';
 import 'package:dio/dio.dart';
 
 class DioClient {
   final Dio dio = Dio(
     BaseOptions(
-      baseUrl: "https://jsonplaceholder.typicode.com",
+      // baseUrl: "https://jsonplaceholder.typicode.com",
+      baseUrl: FlavorConfig.instance.customerBaseUrl,
+
       connectTimeout: const Duration(seconds: 5),
       receiveTimeout: const Duration(seconds: 5),
     ),

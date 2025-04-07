@@ -37,21 +37,21 @@
 //       home: ProfilePage(),
 //       // theme: ThemeData.dark(),
 //       themeMode: ThemeMode.system,
-//       theme: 
+//       theme:
 //        ThemeData(
 //         primarySwatch: Colors.red,
 //         primaryColor: Colors.blue
 //         // primaryColorDark: ThemeData.dark()
-//         // themeMode : 
+//         // themeMode :
 //       ),
 //       // home: PhoneLoginScreen(),
 //       );
 //   }
 // }
 
-
-
 // for AUTH APP
+import 'package:auth_app1/config/flavor_config.dart';
+import 'package:auth_app1/core/utils/device_information.dart';
 import 'package:auth_app1/features/auth/data/models/todo.dart';
 import 'package:auth_app1/features/auth/domain/repos.dart';
 import 'package:auth_app1/features/auth/domain/shared_preference_helper.dart';
@@ -70,50 +70,56 @@ import 'package:get_storage/get_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // await Firebase.initializeApp();
 
-  final appDocumentDirectory = await path_provider.getApplicationDocumentsDirectory();
+  /// Config the flavor
+  String packageName = await DeviceInformation().getAppPackageName();
+  if (packageName.contains('prod')) {
+    FlavorConfig(flavor: Flavor.prod);
+  } else if (packageName.contains('stage')) {
+    FlavorConfig(flavor: Flavor.stage);
+  } else if (packageName.contains('qa')) {
+    FlavorConfig(flavor: Flavor.qa);
+  } else {
+    FlavorConfig(flavor: Flavor.dev);
+  }
+
+  final appDocumentDirectory =
+      await path_provider.getApplicationDocumentsDirectory();
   await Hive.initFlutter(appDocumentDirectory.path);
   Hive.registerAdapter(TodoAdapter());
-  
-  await GetStorage.init(); 
+
+  await GetStorage.init();
   await SharedPreferencesHelper.init();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   Get.put(AuthController());
   Get.put(ProfileController());
-   Get.put(ThemeController()); 
-   Get.put(PostController());
-
+  Get.put(ThemeController());
+  Get.put(PostController());
 
   var store = await userProfileSpRepo.get();
   print(store);
-  runApp( MainApp());
+  runApp(MainApp());
 }
 
 class MainApp extends StatelessWidget {
   // const MainApp({super.key});
 
-    final ThemeController themeController = Get.put(ThemeController());
-
+  final ThemeController themeController = Get.put(ThemeController());
 
   @override
   Widget build(BuildContext context) {
-    return
-
-    Obx(() => GetMaterialApp(
-          debugShowCheckedModeBanner: false,
-          theme: themeController.themes[themeController.themeIndex],
-          home: PhoneLoginScreen(),
-        ));
-   
+    return Obx(
+      () => GetMaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: themeController.themes[themeController.themeIndex],
+        home: PhoneLoginScreen(),
+      ),
+    );
   }
 }
-
 
 // import 'package:auth_app1/features/auth/presentation/bindings/country_binding.dart';
 // import 'package:auth_app1/features/auth/presentation/screens/country_view.dart';
