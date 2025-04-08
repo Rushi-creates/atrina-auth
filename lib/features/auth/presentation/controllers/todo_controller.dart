@@ -113,10 +113,13 @@ class TodoController extends GetxController {
       );
     }
   }
-  
+
   Future<void> deleteCompletedTodos() async {
+
   try {
     final completedTodos = _todoBox.values.where((todo) => todo.isDone).toList();
+
+    if(completedTodos.isEmpty) return;
 
     for (var todo in completedTodos) {
       await _todoBox.delete(todo.id);

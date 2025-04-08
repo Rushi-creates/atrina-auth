@@ -228,38 +228,77 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
       ),
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          FloatingActionButton(
-            onPressed: () {
-              Get.to(() => CreateTodoScreen());
-            },
-            child: Icon(Icons.add),
-          ),
-
-           Card(
-            color: Colors.red,
-             child: Padding(
-               padding: const EdgeInsets.all(6.0),
-               child: IconButton(
-                  onPressed: () async {
-                    Get.defaultDialog(
-                      title: "Are you sure?",
-                      middleText: "This will delete all your completed todos",
-                      textConfirm: "OK",
-                      textCancel: "Cancel",
-                      onConfirm: () {
-                        todoController.deleteCompletedTodos();
-                        Get.back();
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+         Card(
+              color: Colors.deepPurpleAccent,
+               child: Padding(
+                 padding: const EdgeInsets.all(6.0),
+                 child: SizedBox(
+                  height: 40,
+                   child: Padding(
+                     padding: const EdgeInsets.all(8.0),
+                     child: Row(
+                      children: [
+                     InkWell(
+                      onTap: (){
+                         FlavorConfig(flavor: Flavor.dev);
                       },
-                    );
-                  },
-                  icon: Icon(Icons.delete_forever, size: 25),
-                ),
+                      child: Text('Dev')),
+                     VerticalDivider(color: Colors.white,),
+                     InkWell(
+                      onTap: (){
+                         FlavorConfig(flavor: Flavor.prod);
+                      },
+                      child: Text('Prod')),
+                     VerticalDivider(color: Colors.white,),
+
+                     InkWell(
+                      onTap: (){
+                         FlavorConfig(flavor: Flavor.qa);
+                      },
+                      child: Text('Qa')),
+                     ],),
+                   ),
+                 )
+               ),
              ),
-           ),
-        ],
+             Spacer(),
+        
+          
+             Card(
+              color: Colors.red,
+               child: Padding(
+                 padding: const EdgeInsets.all(6.0),
+                 child: IconButton(
+                    onPressed: () async {
+                      Get.defaultDialog(
+                        title: "Are you sure?",
+                        middleText: "This will delete all your completed todos",
+                        textConfirm: "OK",
+                        textCancel: "Cancel",
+                        onConfirm: () {
+                          todoController.deleteCompletedTodos();
+                          Get.back();
+                        },
+                      );
+                    },
+                    icon: Icon(Icons.delete_forever, size: 25),
+                  ),
+               ),
+             ),
+               FloatingActionButton(
+              onPressed: () {
+                Get.to(() => CreateTodoScreen());
+              },
+              child: Icon(Icons.add),
+            ),
+        
+          ],
+        ),
       ),
     );
   }
