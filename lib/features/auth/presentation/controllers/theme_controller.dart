@@ -8,24 +8,60 @@ class ThemeController extends GetxController {
 
   int get themeIndex => _themeIndex.value;
 
-
-//
+  //
   final List<ThemeData> themes = [
-    ThemeData(
-      brightness: Brightness.light,
-      primarySwatch: Colors.blue,
-    ),
+    ThemeData(brightness: Brightness.light, primarySwatch: Colors.blue),
     ThemeData(
       brightness: Brightness.dark,
       primarySwatch: Colors.deepPurple,
+      primaryTextTheme: TextTheme(),
+      // textTheme: TextTheme(titleSmall: TextStyle(color: Colors.white))
     ),
     ThemeData(
-      brightness: Brightness.light,
-      primarySwatch: Colors.blueGrey,
+      brightness: Brightness.dark,
+      primarySwatch: MaterialColor(0xFF212121, <int, Color>{
+        50: Color(0xFFFAFAFA),
+        100: Color(0xFFF5F5F5),
+        200: Color(0xFFEEEEEE),
+        300: Color(0xFFE0E0E0),
+        400: Color(0xFFBDBDBD),
+        500: Color(0xFF9E9E9E),
+        600: Color(0xFF616161),
+        700: Color(0xFF424242),
+        800: Color(0xFF303030),
+        900: Color(0xFF212121),
+      }),
+
+      cardColor: MaterialColor(0xFF212121, <int, Color>{
+        50: Color(0xFFFAFAFA),
+        100: Color(0xFFF5F5F5),
+        200: Color(0xFFEEEEEE),
+        300: Color(0xFFE0E0E0),
+        400: Color(0xFFBDBDBD),
+        500: Color(0xFF9E9E9E),
+        600: Color(0xFF616161),
+        700: Color(0xFF424242),
+        800: Color(0xFF303030),
+        900: Color(0xFF212121),
+      }),
+      scaffoldBackgroundColor: MaterialColor(0xFF212121, <int, Color>{
+        50: Color(0xFFFAFAFA),
+        100: Color(0xFFF5F5F5),
+        200: Color(0xFFEEEEEE),
+        300: Color(0xFFE0E0E0),
+        400: Color(0xFFBDBDBD),
+        500: Color(0xFF9E9E9E),
+        600: Color(0xFF616161),
+        700: Color(0xFF424242),
+        800: Color(0xFF303030),
+        900: Color(0xFF212121),
+      }),
     ),
     ThemeData(
       brightness: Brightness.light,
       primarySwatch: Colors.green,
+      cardColor: Colors.greenAccent,
+      scaffoldBackgroundColor: Colors.greenAccent,
     ),
   ];
 

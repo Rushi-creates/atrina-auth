@@ -1,12 +1,15 @@
 // lib/screens/home_screen.dart
+import 'package:auth_app1/config/flavor_config.dart';
 import 'package:auth_app1/features/auth/domain/repos.dart';
 import 'package:auth_app1/features/auth/domain/utils/common_functions.dart';
 import 'package:auth_app1/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:auth_app1/features/auth/presentation/controllers/profile_controller.dart';
+import 'package:auth_app1/features/auth/presentation/controllers/theme_controller.dart';
 import 'package:auth_app1/features/auth/presentation/screens/create_todo_screen.dart';
 import 'package:auth_app1/features/auth/presentation/screens/edit_todo_screen.dart';
 import 'package:auth_app1/features/auth/presentation/screens/post_screen.dart';
 import 'package:auth_app1/features/auth/presentation/screens/profile_screen.dart';
+import 'package:auth_app1/features/auth/presentation/screens/profile_screen_new.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -17,12 +20,17 @@ class HomeScreen extends StatelessWidget {
   final TodoController todoController = Get.put(TodoController());
   final AuthController authController = Get.find();
   final ProfileController profileController = Get.find();
-
+  // final ThemeController themeController = Get.find();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // backgroundColor:
+      // themeController.themes[themeController.themeIndex].cardColor,
       appBar: AppBar(
+      //   backgroundColor: 
+      // themeController.themes[themeController.themeIndex].cardColor,
+        
         title: Text('To-Do List', style: TextStyle(fontFamily: 'Roboto')),
         centerTitle: true,
         leading: Obx(
@@ -32,23 +40,21 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
         actions: [
-           IconButton(
+          IconButton(
             onPressed: () async {
-              Get.to(()=> PostView());
+              Get.to(() => PostView());
               // await authController.logout();
               // await userProfileSpRepo.remove();
               // setInitialScreen();
-              
             },
             icon: Icon(Icons.pages),
           ),
           IconButton(
             onPressed: () async {
-              Get.to(()=> ProfilePage());
+              Get.to(() => ProfilePageNew());
               // await authController.logout();
               // await userProfileSpRepo.remove();
               // setInitialScreen();
-              
             },
             icon: Icon(Icons.person),
           ),
@@ -57,7 +63,6 @@ class HomeScreen extends StatelessWidget {
               // await authController.logout();
               await userProfileSpRepo.remove();
               setInitialScreen();
-              
             },
             icon: Icon(Icons.logout),
           ),
@@ -78,6 +83,10 @@ class HomeScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+                    Text(
+                      'Flavor is ${FlavorConfig.instance.name}',
+                    ),
+                    SizedBox(height: 8),
                     // Profile Image
                     CircleAvatar(
                       radius: 50,
@@ -99,6 +108,8 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 8),
+
+                    
 
                     // Bio (Uncomment if needed)
                     // Text(

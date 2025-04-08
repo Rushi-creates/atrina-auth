@@ -45,8 +45,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class TodoController extends GetxController {
-  static TodoController instance = Get.find();
+class TodoFirebaseController extends GetxController {
+  static TodoFirebaseController instance = Get.find();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 

@@ -1,4 +1,5 @@
 import 'package:auth_app1/features/auth/presentation/controllers/theme_controller.dart';
+import 'package:auth_app1/features/auth/presentation/screens/profile_screen_new.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -27,7 +28,10 @@ class ProfilePage extends StatelessWidget {
               // const Color.fromARGB(255, 252, 157, 14),
 
               // PINK + BLUE
-              const Color.fromARGB(255, 221, 21, 88),
+              // const Color.fromARGB(255, 221, 21, 88),
+              // const Color.fromARGB(255, 40, 113, 249),
+
+              const Color.fromARGB(255, 0, 11, 131),
               const Color.fromARGB(255, 40, 113, 249),
             ],
           ),
@@ -44,10 +48,10 @@ class ProfilePage extends StatelessWidget {
                       icon: Icon(Icons.arrow_back_ios, color: Colors.white),
                       onPressed: () => Get.back(),
                     ),
-                    // IconButton(
-                    //   icon: Icon(Icons.settings, color: Colors.white),
-                    //   onPressed: null,
-                    // ),
+                    IconButton(
+                      icon: Icon(Icons.person, color: Colors.white),
+                      onPressed: () => Get.to(()=> ProfilePage())
+                    ),
                     Obx(
                       () => DropdownButton<int>(
                         icon: Icon(Icons.settings, color: Colors.white),
