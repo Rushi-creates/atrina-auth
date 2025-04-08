@@ -28,9 +28,8 @@ class HomeScreen extends StatelessWidget {
       // backgroundColor:
       // themeController.themes[themeController.themeIndex].cardColor,
       appBar: AppBar(
-      //   backgroundColor: 
-      // themeController.themes[themeController.themeIndex].cardColor,
-        
+        //   backgroundColor:
+        // themeController.themes[themeController.themeIndex].cardColor,
         title: Text('To-Do List', style: TextStyle(fontFamily: 'Roboto')),
         centerTitle: true,
         leading: Obx(
@@ -83,9 +82,7 @@ class HomeScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(
-                      'Flavor is ${FlavorConfig.instance.name}',
-                    ),
+                    Text('Flavor is ${FlavorConfig.instance.name}'),
                     SizedBox(height: 8),
                     // Profile Image
                     CircleAvatar(
@@ -108,8 +105,6 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 8),
-
-                    
 
                     // Bio (Uncomment if needed)
                     // Text(
@@ -176,7 +171,14 @@ class HomeScreen extends StatelessWidget {
                       trailing: IconButton(
                         icon: Icon(Icons.delete, color: Colors.red),
                         onPressed: () {
-                          todoController.deleteTodo(todo.id);
+                          todo.isDone
+                              ? todoController.deleteTodo(todo.id)
+                              : Get.snackbar(
+                                'Cant delete',
+                                'Complete a todo first, in order to delete it',
+                                snackPosition: SnackPosition.BOTTOM,
+                                colorText: Colors.red,
+                              );
                         },
                       ),
                     ),
@@ -226,11 +228,38 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Get.to(() => CreateTodoScreen());
-        },
-        child: Icon(Icons.add),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            onPressed: () {
+              Get.to(() => CreateTodoScreen());
+            },
+            child: Icon(Icons.add),
+          ),
+
+           Card(
+            color: Colors.red,
+             child: Padding(
+               padding: const EdgeInsets.all(6.0),
+               child: IconButton(
+                  onPressed: () async {
+                    Get.defaultDialog(
+                      title: "Are you sure?",
+                      middleText: "This will delete all your completed todos",
+                      textConfirm: "OK",
+                      textCancel: "Cancel",
+                      onConfirm: () {
+                        todoController.deleteCompletedTodos();
+                        Get.back();
+                      },
+                    );
+                  },
+                  icon: Icon(Icons.delete_forever, size: 25),
+                ),
+             ),
+           ),
+        ],
       ),
     );
   }

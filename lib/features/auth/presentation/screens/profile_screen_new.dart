@@ -80,15 +80,20 @@ class ProfilePageNew extends StatelessWidget {
                         ),
 
                         CircleAvatar(
-                          radius: 50,
-                          backgroundColor: Colors.grey,
-                          backgroundImage: NetworkImage(
-                            // 'https://images.pexels.com/photos/9895332/pexels-photo-9895332.jpeg?auto=compress&cs=tinysrgb&w=600'
-                            // 'https://images.pexels.com/photos/8721204/pexels-photo-8721204.jpeg?auto=compress&cs=tinysrgb&w=600'
-                            'https://images.pexels.com/photos/1130792/pexels-photo-1130792.jpeg?auto=compress&cs=tinysrgb&w=600',
-                            // 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSEriWalt3rgigUMC63Bhg4viP_gHy3dHBidlLGVY2ds5rcQO90qjHgXs&s',
+                          radius: 55,
+                          backgroundColor: const Color.fromARGB(167, 255, 255, 255),
+                          child: CircleAvatar(
+                            radius: 50,
+                            backgroundColor: Colors.grey,
+                            backgroundImage: NetworkImage(
+                              // 'https://images.pexels.com/photos/9895332/pexels-photo-9895332.jpeg?auto=compress&cs=tinysrgb&w=600'
+                              // 'https://images.pexels.com/photos/8721204/pexels-photo-8721204.jpeg?auto=compress&cs=tinysrgb&w=600'
+                              'https://images.pexels.com/photos/1130792/pexels-photo-1130792.jpeg?auto=compress&cs=tinysrgb&w=600',
+                              // 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSEriWalt3rgigUMC63Bhg4viP_gHy3dHBidlLGVY2ds5rcQO90qjHgXs&s',
+                            ),
                           ),
                         ),
+                        SizedBox(height: 20),
 
                         Text(
                           'Rushi Creates',

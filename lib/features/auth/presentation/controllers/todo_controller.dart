@@ -29,12 +29,10 @@ class TodoController extends GetxController {
   void fetchTodos() {
     final todoList = _todoBox.values.toList();
     todos.value = todoList;
-    // Sort by creation date (newest first)
     todos.value.sort((a, b) => b.createdAt.compareTo(a.createdAt));
     update();
   }
 
-  // Add a new todo
   Future<void> addTodo(String title) async {
     try {
       final newTodo = Todo(
@@ -60,7 +58,6 @@ class TodoController extends GetxController {
     }
   }
 
-  // Update todo status
   Future<void> updateTodoStatus(String id, bool isDone) async {
     try {
       final todo = _todoBox.get(id);
@@ -80,7 +77,6 @@ class TodoController extends GetxController {
 
   Future<void> updateWholeTodo(Todo oldTodo, Todo newTodo) async {
     try {
-      // Check if anything has changed
       bool hasChanges = false;
       
       if (oldTodo.title != newTodo.title) hasChanges = true;
@@ -99,7 +95,6 @@ class TodoController extends GetxController {
     }
   }
 
-  // Delete a todo
   Future<void> deleteTodo(String id) async {
     try {
       await _todoBox.delete(id);
@@ -118,4 +113,29 @@ class TodoController extends GetxController {
       );
     }
   }
+  
+  Future<void> deleteCompletedTodos() async {
+  try {
+    final completedTodos = _todoBox.values.where((todo) => todo.isDone).toList();
+
+    for (var todo in completedTodos) {
+      await _todoBox.delete(todo.id);
+    }
+
+    fetchTodos();
+
+    Get.snackbar(
+      "Success",
+      "Completed todos deleted successfully!",
+      snackPosition: SnackPosition.BOTTOM,
+    );
+  } catch (e) {
+    Get.snackbar(
+      "Error",
+      "Failed to delete completed todos: $e",
+      snackPosition: SnackPosition.BOTTOM,
+    );
+  }
+}
+
 }
