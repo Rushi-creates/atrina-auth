@@ -6,8 +6,8 @@ import 'package:get/get.dart';
 import 'register_screen.dart';
 
 class PhoneLoginScreen extends StatelessWidget {
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+  final TextEditingController  emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
   final AuthController authController = Get.find();
   final ProfileController profileController = Get.find();
 
@@ -23,6 +23,7 @@ class PhoneLoginScreen extends StatelessWidget {
               controller: emailController,
               keyboardType: TextInputType.number, // Allows only numbers
               decoration: InputDecoration(labelText: "Number"),
+              // validator 
             ),
             TextField(
               controller: passwordController,

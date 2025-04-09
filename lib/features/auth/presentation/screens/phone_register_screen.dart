@@ -26,6 +26,9 @@ class PhoneRegisterScreen extends StatelessWidget {
               controller: passwordController,
               decoration: InputDecoration(labelText: "Password"),
               obscureText: true,
+              // validator:(){
+
+              // }
             ),
             SizedBox(height: 20),
             ElevatedButton(
