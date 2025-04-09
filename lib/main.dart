@@ -59,6 +59,7 @@ import 'package:auth_app1/features/auth/presentation/controllers/auth_controller
 import 'package:auth_app1/features/auth/presentation/controllers/login_controller.dart';
 import 'package:auth_app1/features/auth/presentation/controllers/post_controller.dart';
 import 'package:auth_app1/features/auth/presentation/controllers/profile_controller.dart';
+import 'package:auth_app1/features/auth/presentation/controllers/register_controller.dart';
 import 'package:auth_app1/features/auth/presentation/controllers/theme_controller.dart';
 import 'package:auth_app1/features/auth/presentation/screens/login_screen.dart';
 import 'package:auth_app1/features/auth/presentation/screens/phone_login_screen.dart';
@@ -97,6 +98,7 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   Get.put(AuthController());
   Get.put(LoginController());
+  Get.put(RegisterController());
   Get.put(ProfileController());
   Get.put(ThemeController());
   Get.put(PostController());

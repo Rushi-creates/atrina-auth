@@ -68,56 +68,56 @@ class AuthController extends GetxController {
     }
   }
 
-  Future<void> registerWithPhone(String number, String password) async {
-    try {
-      // Check if user already exists
-      var userDoc =
-          await firestore
-              .collection('numberProfiles')
-              .where('number', isEqualTo: number)
-              .get();
+  // Future<void> registerWithPhone(String number, String password) async {
+  //   try {
+  //     // Check if user already exists
+  //     var userDoc =
+  //         await firestore
+  //             .collection('numberProfiles')
+  //             .where('number', isEqualTo: number)
+  //             .get();
 
-      if (userDoc.docs.isNotEmpty) {
-        // User already exists, prompt to log in
-        Get.snackbar(
-          "Account Exists",
-          "An account with this number already exists. Please log in.",
-          backgroundColor: Colors.orange,
-          colorText: Colors.white,
-        );
-        return;
-      }
+  //     if (userDoc.docs.isNotEmpty) {
+  //       // User already exists, prompt to log in
+  //       Get.snackbar(
+  //         "Account Exists",
+  //         "An account with this number already exists. Please log in.",
+  //         backgroundColor: Colors.orange,
+  //         colorText: Colors.white,
+  //       );
+  //       return;
+  //     }
 
-      // User doesn't exist, proceed with registration
-      Map<String, dynamic> userMap = {'number': number, 'password': password};
+  //     // User doesn't exist, proceed with registration
+  //     Map<String, dynamic> userMap = {'number': number, 'password': password};
 
-      UserProfile userProfile = UserProfile(
-        id: number,
-        name: number,
-        bio: password,
-        profilePictureUrl:
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkoKnnYEns44I5HqlyDuoHdesuKqwLV9dRk28IqUbguJudG7-eAQKYacIzUJEgwNQoLD5Y&s',
-      );
+  //     UserProfile userProfile = UserProfile(
+  //       id: number,
+  //       name: number,
+  //       bio: password,
+  //       profilePictureUrl:
+  //           'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkoKnnYEns44I5HqlyDuoHdesuKqwLV9dRk28IqUbguJudG7-eAQKYacIzUJEgwNQoLD5Y&s',
+  //     );
 
-      await firestore.collection('numberProfiles').doc(number).set(userMap);
-      await userProfileSpRepo.set(userProfile);
-      await setInitialScreen();
+  //     await firestore.collection('numberProfiles').doc(number).set(userMap);
+  //     await userProfileSpRepo.set(userProfile);
+  //     await setInitialScreen();
 
-      Get.snackbar(
-        "Success",
-        "Account created successfully!",
-        backgroundColor: Colors.green,
-        colorText: Colors.white,
-      );
-    } catch (e) {
-      Get.snackbar(
-        "Error",
-        e.toString(),
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
-    }
-  }
+  //     Get.snackbar(
+  //       "Success",
+  //       "Account created successfully!",
+  //       backgroundColor: Colors.green,
+  //       colorText: Colors.white,
+  //     );
+  //   } catch (e) {
+  //     Get.snackbar(
+  //       "Error",
+  //       e.toString(),
+  //       backgroundColor: Colors.red,
+  //       colorText: Colors.white,
+  //     );
+  //   }
+  // }
 
   // Future<void> login(String email, String password) async {
   //   try {
@@ -127,56 +127,56 @@ class AuthController extends GetxController {
   //   }
   // }
 
-  Future<void> loginWithPhone(String number, String password) async {
-    try {
-      // Reference to the Firestore collection
-      var userDoc =
-          await firestore
-              .collection('numberProfiles')
-              .where('number', isEqualTo: number)
-              .get();
+  // Future<void> loginWithPhone(String number, String password) async {
+  //   try {
+  //     // Reference to the Firestore collection
+  //     var userDoc =
+  //         await firestore
+  //             .collection('numberProfiles')
+  //             .where('number', isEqualTo: number)
+  //             .get();
 
-      // Check if user exists
-      if (userDoc.docs.isNotEmpty) {
-        // User exists, proceed with authentication
-        Map<String, dynamic> userData = userDoc.docs.first.data();
+  //     // Check if user exists
+  //     if (userDoc.docs.isNotEmpty) {
+  //       // User exists, proceed with authentication
+  //       Map<String, dynamic> userData = userDoc.docs.first.data();
 
-        if (userData['password'] == password) {
-          UserProfile userProfile = UserProfile(
-            id: userDoc.docs.first.id, // Assign document ID
-            name: number,
-            bio: password,
-            profilePictureUrl:
-                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkoKnnYEns44I5HqlyDuoHdesuKqwLV9dRk28IqUbguJudG7-eAQKYacIzUJEgwNQoLD5Y&s',
-          );
+  //       if (userData['password'] == password) {
+  //         UserProfile userProfile = UserProfile(
+  //           id: userDoc.docs.first.id, // Assign document ID
+  //           name: number,
+  //           bio: password,
+  //           profilePictureUrl:
+  //               'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkoKnnYEns44I5HqlyDuoHdesuKqwLV9dRk28IqUbguJudG7-eAQKYacIzUJEgwNQoLD5Y&s',
+  //         );
 
-          await userProfileSpRepo.set(userProfile);
-          await setInitialScreen();
-        } else {
-          Get.snackbar(
-            "Error",
-            "Incorrect password",
-            backgroundColor: Colors.red,
-            colorText: Colors.white,
-          );
-        }
-      } else {
-        Get.snackbar(
-          "Error",
-          "User does not exist",
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
-      }
-    } catch (e) {
-      Get.snackbar(
-        "Error",
-        e.toString(),
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
-    }
-  }
+  //         await userProfileSpRepo.set(userProfile);
+  //         await setInitialScreen();
+  //       } else {
+  //         Get.snackbar(
+  //           "Error",
+  //           "Incorrect password",
+  //           backgroundColor: Colors.red,
+  //           colorText: Colors.white,
+  //         );
+  //       }
+  //     } else {
+  //       Get.snackbar(
+  //         "Error",
+  //         "User does not exist",
+  //         backgroundColor: Colors.red,
+  //         colorText: Colors.white,
+  //       );
+  //     }
+  //   } catch (e) {
+  //     Get.snackbar(
+  //       "Error",
+  //       e.toString(),
+  //       backgroundColor: Colors.red,
+  //       colorText: Colors.white,
+  //     );
+  //   }
+  // }
 
   Future<void> logout() async {
     await auth.signOut();

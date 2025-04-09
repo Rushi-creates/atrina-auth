@@ -1,16 +1,22 @@
 import 'package:auth_app1/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:auth_app1/features/auth/presentation/controllers/profile_controller.dart';
+import 'package:auth_app1/features/auth/presentation/controllers/register_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class PhoneRegisterScreen extends StatelessWidget {
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  final AuthController authController = Get.find();
-  final ProfileController profileController = Get.find();
+class PhoneRegisterScreen extends GetView<RegisterController> {
+  const PhoneRegisterScreen({super.key});
+
+
+  // final AuthController authController = Get.find();
+  // final ProfileController profileController = Get.find();
 
   @override
   Widget build(BuildContext context) {
+    
+  final TextEditingController  emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
     return Scaffold(
       appBar: AppBar(title: Text("Register with Phone number")),
       body: Padding(
@@ -33,11 +39,11 @@ class PhoneRegisterScreen extends StatelessWidget {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () async {
-                await authController.registerWithPhone(
+                await controller.registerWithPhone(
                   emailController.text,
                   passwordController.text,
                 );
-                await profileController.saveProfile(
+                await controller.saveProfile(
                   emailController.text,
                   passwordController.text,
                   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSEriWalt3rgigUMC63Bhg4viP_gHy3dHBidlLGVY2ds5rcQO90qjHgXs&s',
