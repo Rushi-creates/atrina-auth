@@ -2,6 +2,7 @@ import 'package:auth_app1/features/auth/data/models/profile.dart';
 import 'package:auth_app1/features/auth/domain/repos.dart';
 import 'package:auth_app1/features/auth/domain/shared_preference_helper.dart';
 import 'package:auth_app1/features/auth/domain/utils/common_functions.dart';
+import 'package:auth_app1/features/auth/domain/utils/common_widgets.dart';
 import 'package:auth_app1/features/auth/presentation/screens/home_screen.dart';
 import 'package:auth_app1/features/auth/presentation/screens/login_screen.dart';
 import 'package:auth_app1/features/auth/presentation/screens/phone_login_screen.dart';
@@ -11,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AuthController extends GetxController {
-  static AuthController instance = Get.find();
+  // static AuthController instance = Get.find();
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -118,18 +119,13 @@ class AuthController extends GetxController {
     }
   }
 
-  Future<void> login(String email, String password) async {
-    try {
-      await auth.signInWithEmailAndPassword(email: email, password: password);
-    } catch (e) {
-      Get.snackbar(
-        "Error",
-        e.toString(),
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
-    }
-  }
+  // Future<void> login(String email, String password) async {
+  //   try {
+  //     await auth.signInWithEmailAndPassword(email: email, password: password);
+  //   } catch (e) {
+  //     showErrorSnackbar(e.toString());
+  //   }
+  // }
 
   Future<void> loginWithPhone(String number, String password) async {
     try {
