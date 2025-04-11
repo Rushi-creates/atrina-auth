@@ -3,25 +3,15 @@ import 'package:auth_app1/config/flavor_config.dart';
 import 'package:auth_app1/config/routes.dart';
 import 'package:auth_app1/features/auth/domain/repos.dart';
 import 'package:auth_app1/features/auth/domain/utils/common_functions.dart';
-import 'package:auth_app1/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:auth_app1/features/auth/presentation/controllers/home_controller.dart';
-import 'package:auth_app1/features/auth/presentation/controllers/profile_controller.dart';
-import 'package:auth_app1/features/auth/presentation/controllers/theme_controller.dart';
 import 'package:auth_app1/features/auth/presentation/screens/create_todo_screen.dart';
-import 'package:auth_app1/features/auth/presentation/screens/edit_todo_screen.dart';
-import 'package:auth_app1/features/auth/presentation/screens/post_screen.dart';
-import 'package:auth_app1/features/auth/presentation/screens/profile_screen_new.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import '../controllers/todo_controller.dart';
 
 class HomeScreen extends GetView<HomeController> {
   const HomeScreen({super.key});
-  // final TodoController todoController = Get.put(TodoController());
-  // final AuthController authController = Get.find();
-  // final ProfileController profileController = Get.find();
-  // final ThemeController themeController = Get.find();
+
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +21,7 @@ class HomeScreen extends GetView<HomeController> {
       appBar: AppBar(
         //   backgroundColor:
         // themeController.themes[themeController.themeIndex].cardColor,
-        title: Text('To-Do List', style: TextStyle(fontFamily: 'Roboto')),
+        title: Text('Hive list', style: TextStyle(fontFamily: 'Roboto')),
         centerTitle: true,
         leading: Obx(
           () => Padding(
@@ -51,7 +41,7 @@ class HomeScreen extends GetView<HomeController> {
           ),
           IconButton(
             onPressed: () async {
-              Get.to(() => ProfileView());
+              Get.toNamed(profileView);
               // await authController.logout();
               // await userProfileSpRepo.remove();
               // setInitialScreen();
@@ -107,7 +97,7 @@ class HomeScreen extends GetView<HomeController> {
                     ),
                     SizedBox(height: 8),
 
-                    // Bio (Uncomment if needed)
+                    // Bio
                     // Text(
                     //   profile.bio,
                     //   style: TextStyle(fontSize: 16, color: Colors.grey[700]),
