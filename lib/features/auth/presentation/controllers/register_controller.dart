@@ -13,12 +13,17 @@ class RegisterController extends GetxController {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   Rx<UserProfile?> userProfile = Rx<UserProfile?>(null);
+  
+  TextEditingController  emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
-  Future<void> registerWithPhone(String number, String password) async {
+  Future<void> registerWithPhone(
+    // String number, String password
+    ) async {
     try {
       var userDoc =
           await FirebasePaths.numberProfiles
-              .where('number', isEqualTo: number)
+              .where('number', isEqualTo: emailController.text)
               .get();
 
       if (userDoc.docs.isNotEmpty) {
@@ -31,17 +36,17 @@ class RegisterController extends GetxController {
         return;
       }
 
-      Map<String, dynamic> userMap = {'number': number, 'password': password};
+      Map<String, dynamic> userMap = {'number': emailController.text, 'password': passwordController.text};
 
       UserProfile userProfile = UserProfile(
-        id: number,
-        name: number,
-        bio: password,
+        id: emailController.text,
+        name: emailController.text,
+        bio: passwordController.text,
         profilePictureUrl:
             'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkoKnnYEns44I5HqlyDuoHdesuKqwLV9dRk28IqUbguJudG7-eAQKYacIzUJEgwNQoLD5Y&s',
       );
 
-      await FirebasePaths.numberProfiles.doc(number).set(userMap);
+      await FirebasePaths.numberProfiles.doc(emailController.text).set(userMap);
       await userProfileSpRepo.set(userProfile);
       await setInitialScreen();
 
@@ -56,22 +61,24 @@ class RegisterController extends GetxController {
     }
   }
 
-  Future<void> loginWithPhone(String number, String password) async {
+  Future<void> loginWithPhone(
+    // String number, String password
+    ) async {
     try {
       var userDocs =
           await FirebasePaths.numberProfiles
-              .where('number', isEqualTo: number)
+              .where('number', isEqualTo: emailController.text)
               .get();
 
       if (userDocs.docs.isNotEmpty) {
         Map<String, dynamic> userData =
             userDocs.docs.first.data() as Map<String, dynamic>;
 
-        if (userData['password'] == password) {
+        if (userData['password'] == passwordController.text) {
           UserProfile userProfile = UserProfile(
             id: userDocs.docs.first.id,
-            name: number,
-            bio: password,
+            name: emailController.text,
+            bio: passwordController.text,
             profilePictureUrl:
                 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkoKnnYEns44I5HqlyDuoHdesuKqwLV9dRk28IqUbguJudG7-eAQKYacIzUJEgwNQoLD5Y&s',
           );
@@ -90,8 +97,8 @@ class RegisterController extends GetxController {
   }
 
   Future<void> saveProfile(
-    String name,
-    String bio,
+    // String name,
+    // String bio,
     String profilePictureUrl,
   ) async {
     try {
@@ -100,14 +107,14 @@ class RegisterController extends GetxController {
       if (userSpProfile != null) {
         userProfile.value = UserProfile(
           id: userSpProfile.id,
-          name: name,
-          bio: bio,
+          name: emailController.text,
+          bio: passwordController.text,
           profilePictureUrl: profilePictureUrl,
         );
 
         await FirebasePaths.profiles.doc(userSpProfile.id).set({
-          'name': name,
-          'bio': bio,
+          'name': emailController.text,
+          'bio': passwordController.text,
           'profilePictureUrl': profilePictureUrl,
         });
       }

@@ -46,27 +46,27 @@ class AuthController extends GetxController {
   //   return spUser;
   // }
 
-  Future<void> register(String email, String password) async {
-    try {
-      await auth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      Get.snackbar(
-        "Success",
-        "Account created successfully!",
-        backgroundColor: Colors.green,
-        colorText: Colors.white,
-      );
-    } catch (e) {
-      Get.snackbar(
-        "Error",
-        e.toString(),
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
-    }
-  }
+  // Future<void> register(String email, String password) async {
+  //   try {
+  //     await auth.createUserWithEmailAndPassword(
+  //       email: email,
+  //       password: password,
+  //     );
+  //     Get.snackbar(
+  //       "Success",
+  //       "Account created successfully!",
+  //       backgroundColor: Colors.green,
+  //       colorText: Colors.white,
+  //     );
+  //   } catch (e) {
+  //     Get.snackbar(
+  //       "Error",
+  //       e.toString(),
+  //       backgroundColor: Colors.red,
+  //       colorText: Colors.white,
+  //     );
+  //   }
+  // }
 
   // Future<void> registerWithPhone(String number, String password) async {
   //   try {
