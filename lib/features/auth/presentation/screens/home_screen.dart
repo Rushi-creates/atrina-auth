@@ -1,5 +1,6 @@
 // lib/screens/home_screen.dart
 import 'package:auth_app1/config/flavor_config.dart';
+import 'package:auth_app1/config/routes.dart';
 import 'package:auth_app1/features/auth/domain/repos.dart';
 import 'package:auth_app1/features/auth/domain/utils/common_functions.dart';
 import 'package:auth_app1/features/auth/presentation/controllers/auth_controller.dart';
@@ -16,7 +17,7 @@ import 'package:intl/intl.dart';
 import '../controllers/todo_controller.dart';
 
 class HomeScreen extends GetView<HomeController> {
-  HomeScreen({super.key});
+  const HomeScreen({super.key});
   // final TodoController todoController = Get.put(TodoController());
   // final AuthController authController = Get.find();
   // final ProfileController profileController = Get.find();
@@ -41,7 +42,7 @@ class HomeScreen extends GetView<HomeController> {
         actions: [
           IconButton(
             onPressed: () async {
-              Get.to(() => PostView());
+              Get.toNamed(postView);
               // await authController.logout();
               // await userProfileSpRepo.remove();
               // setInitialScreen();
@@ -50,7 +51,7 @@ class HomeScreen extends GetView<HomeController> {
           ),
           IconButton(
             onPressed: () async {
-              Get.to(() => ProfilePageNew());
+              Get.to(() => ProfileView());
               // await authController.logout();
               // await userProfileSpRepo.remove();
               // setInitialScreen();
@@ -146,12 +147,15 @@ class HomeScreen extends GetView<HomeController> {
                     margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     child: ListTile(
                       onTap: () {
-                        Get.to(() => EditTodoScreen(oldTodo: todo));
+                        Get.toNamed(editTodoView, arguments: todo);
                       },
                       leading: Checkbox(
                         value: todo.isDone,
                         onChanged: (value) {
-                          controller.todoController.updateTodoStatus(todo.id, value!);
+                          controller.todoController.updateTodoStatus(
+                            todo.id,
+                            value!,
+                          );
                         },
                       ),
                       title: Text(
@@ -233,70 +237,72 @@ class HomeScreen extends GetView<HomeController> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-         Card(
+            Card(
               color: Colors.deepPurpleAccent,
-               child: Padding(
-                 padding: const EdgeInsets.all(6.0),
-                 child: SizedBox(
+              child: Padding(
+                padding: const EdgeInsets.all(6.0),
+                child: SizedBox(
                   height: 40,
-                   child: Padding(
-                     padding: const EdgeInsets.all(8.0),
-                     child: Row(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
                       children: [
-                     InkWell(
-                      onTap: (){
-                         FlavorConfig(flavor: Flavor.dev);
-                      },
-                      child: Text('Dev')),
-                     VerticalDivider(color: Colors.white,),
-                     InkWell(
-                      onTap: (){
-                         FlavorConfig(flavor: Flavor.prod);
-                      },
-                      child: Text('Prod')),
-                     VerticalDivider(color: Colors.white,),
+                        InkWell(
+                          onTap: () {
+                            FlavorConfig(flavor: Flavor.dev);
+                          },
+                          child: Text('Dev'),
+                        ),
+                        VerticalDivider(color: Colors.white),
+                        InkWell(
+                          onTap: () {
+                            FlavorConfig(flavor: Flavor.prod);
+                          },
+                          child: Text('Prod'),
+                        ),
+                        VerticalDivider(color: Colors.white),
 
-                     InkWell(
-                      onTap: (){
-                         FlavorConfig(flavor: Flavor.qa);
-                      },
-                      child: Text('Qa')),
-                     ],),
-                   ),
-                 )
-               ),
-             ),
-             Spacer(),
-        
-          
-             Card(
-              color: Colors.red,
-               child: Padding(
-                 padding: const EdgeInsets.all(6.0),
-                 child: IconButton(
-                    onPressed: () async {
-                      Get.defaultDialog(
-                        title: "Are you sure?",
-                        middleText: "This will delete all your completed todos",
-                        textConfirm: "OK",
-                        textCancel: "Cancel",
-                        onConfirm: () {
-                          controller.todoController.deleteCompletedTodos();
-                          Get.back();
-                        },
-                      );
-                    },
-                    icon: Icon(Icons.delete_forever, size: 25),
+                        InkWell(
+                          onTap: () {
+                            FlavorConfig(flavor: Flavor.qa);
+                          },
+                          child: Text('Qa'),
+                        ),
+                      ],
+                    ),
                   ),
-               ),
-             ),
-               FloatingActionButton(
+                ),
+              ),
+            ),
+            Spacer(),
+
+            Card(
+              color: Colors.red,
+              child: Padding(
+                padding: const EdgeInsets.all(6.0),
+                child: IconButton(
+                  onPressed: () async {
+                    Get.defaultDialog(
+                      title: "Are you sure?",
+                      middleText: "This will delete all your completed todos",
+                      textConfirm: "OK",
+                      textCancel: "Cancel",
+                      onConfirm: () {
+                        controller.todoController.deleteCompletedTodos();
+                        Get.back();
+                      },
+                    );
+                  },
+                  icon: Icon(Icons.delete_forever, size: 25),
+                ),
+              ),
+            ),
+            FloatingActionButton(
               onPressed: () {
                 Get.to(() => CreateTodoScreen());
               },
               child: Icon(Icons.add),
             ),
-        
           ],
         ),
       ),

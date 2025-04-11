@@ -7,12 +7,12 @@ class EditTodoScreen extends StatelessWidget {
   final TodoController todoController = Get.find();
   final TextEditingController titleController = TextEditingController();
 
-  final Todo oldTodo;
-
-  EditTodoScreen({required this.oldTodo});
+  // final Todo oldTodo;
+  // EditTodoScreen({required this.oldTodo});
 
   @override
   Widget build(BuildContext context) {
+     final oldTodo = Get.arguments as Todo;
     // Load the current title of the todo item
     var currentTodo = todoController.todos.value.firstWhere((todo) => todo.id == oldTodo.id);
 

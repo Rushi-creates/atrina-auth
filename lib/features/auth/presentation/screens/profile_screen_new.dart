@@ -4,8 +4,10 @@ import 'package:auth_app1/features/auth/presentation/controllers/theme_controlle
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ProfilePageNew extends StatelessWidget {
-  // const ProfilePageNew({super.key});
+class ProfileView extends StatelessWidget {
+   ProfileView({super.key});
+
+  // const ProfileView({super.key});
 
   final ThemeController themeController = Get.find();
 
@@ -15,6 +17,7 @@ class ProfilePageNew extends StatelessWidget {
     'Grey Theme',
     'Green Theme',
   ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

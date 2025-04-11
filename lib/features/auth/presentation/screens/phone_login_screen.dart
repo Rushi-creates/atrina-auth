@@ -1,3 +1,4 @@
+import 'package:auth_app1/config/routes.dart';
 import 'package:auth_app1/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:auth_app1/features/auth/presentation/controllers/login_controller.dart';
 import 'package:auth_app1/features/auth/presentation/controllers/profile_controller.dart';
@@ -106,7 +107,7 @@ class PhoneLoginScreen extends GetView<LoginController> {
             ),
             TextButton(
               onPressed: () {
-                Get.to(() => PhoneRegisterScreen());
+                Get.toNamed(registerView);
               },
               child: Text("Don't have an account? Register"),
             ),

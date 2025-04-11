@@ -51,6 +51,7 @@
 
 // for AUTH APP
 import 'package:auth_app1/config/flavor_config.dart';
+import 'package:auth_app1/config/routes.dart';
 import 'package:auth_app1/core/utils/device_information.dart';
 import 'package:auth_app1/features/auth/data/models/todo.dart';
 import 'package:auth_app1/features/auth/domain/repos.dart';
@@ -121,7 +122,9 @@ class MainApp extends StatelessWidget {
       () => GetMaterialApp(
         debugShowCheckedModeBanner: false,
         theme: themeController.themes[themeController.themeIndex],
-        home: PhoneLoginScreen(),
+        // home: PhoneLoginScreen(),
+        initialRoute: loginView,
+        getPages: routes,
       ),
     );
   }

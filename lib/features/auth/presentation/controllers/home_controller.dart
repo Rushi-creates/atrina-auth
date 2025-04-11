@@ -8,7 +8,5 @@ import 'package:get/get.dart';
 class HomeController extends GetxController {
   final TodoController todoController = Get.put(TodoController());
   final AuthController authController = Get.find();
-  final ProfileController profileController = Get.find();
-
-  
+  final ProfileController profileController = Get.find(); 
 }

@@ -1,6 +1,5 @@
-  import 'package:auth_app1/features/auth/domain/repos.dart';
-import 'package:auth_app1/features/auth/presentation/screens/home_screen.dart';
-import 'package:auth_app1/features/auth/presentation/screens/phone_login_screen.dart';
+  import 'package:auth_app1/config/routes.dart';
+import 'package:auth_app1/features/auth/domain/repos.dart';
 import 'package:get/get.dart';
 
 setInitialScreen() async {
@@ -9,9 +8,9 @@ setInitialScreen() async {
   print('-----------> $spUser');
 
     if (spUser == null) {
-      Get.offAll(() => PhoneLoginScreen());
+      Get.offAllNamed(loginView);
     } else {
-      Get.offAll(() => HomeScreen());
+      Get.offAllNamed(homeView);
     }
     return spUser;
   }
