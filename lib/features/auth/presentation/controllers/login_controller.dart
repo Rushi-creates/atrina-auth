@@ -11,37 +11,80 @@ import 'package:get/get.dart';
 class LoginController extends GetxController {
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  
+
   Rx<UserProfile?> userProfile = Rx<UserProfile?>(null);
 
-  Rx<String> numberValidationText = Rx<String>('');
-  Rx<String> passwordValidationText = Rx<String>('');
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  final Rx<String> phoneError = ''.obs;
+  final Rx<String> passwordError = ''.obs;
 
-
-  Future<String?> numberValidation(String number) async {
-    if(number.isEmpty || number == ''){
-      return 'Please enter a valid number';
+  void validatePhone(String value) {
+    if (value.isEmpty) {
+      phoneError.value = 'Phone number is required';
+    } else if (emailController.text.length != 10) {
+      phoneError.value = 'Phone number length should be of 10 digits';
+    } else if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+      phoneError.value = 'Please enter only numbers';
+    } else {
+      phoneError.value = '';
     }
-    return null;
-
   }
+
+  void validatePassword(String value) {
+    if (value.isEmpty) {
+      passwordError.value = 'Password is required';
+    } else if (value.length < 6) {
+      passwordError.value = 'Password must be at least 6 characters';
+    } else {
+      passwordError.value = '';
+    }
+  }
+
+  bool validateForm() {
+    validatePhone(emailController.text);
+    validatePassword(passwordController.text);
+
+    return phoneError.value.isEmpty && passwordError.value.isEmpty;
+  }
+
+  @override
+  void onClose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.onClose();
+  }
+  // Rx<String> numberValidationText = Rx<String>('');
+  // Rx<String> passwordValidationText = Rx<String>('');
+
+  // TextEditingController emailController = TextEditingController();
+  // TextEditingController passwordController = TextEditingController();
+
+  // Future<String?> numberValidation(String number) async {
+  //   if(number.isEmpty || number == ''){
+  //     return 'Please enter a valid number';
+  //   }
+  //   return null;
+
+  // }
 
   Future<void> loginWithPhone(
     // String number, String password
-    ) async {
+  ) async {
     try {
       var userDocs =
-          await FirebasePaths.numberProfiles.where('number', isEqualTo: emailController.text).get();
+          await FirebasePaths.numberProfiles
+              .where('number', isEqualTo: emailController.text)
+              .get();
 
       if (userDocs.docs.isNotEmpty) {
-        Map<String, dynamic> userData = userDocs.docs.first.data() as Map<String, dynamic> ;
+        Map<String, dynamic> userData =
+            userDocs.docs.first.data() as Map<String, dynamic>;
 
         if (userData['password'] == passwordController.text) {
           UserProfile userProfile = UserProfile(
-            id: userDocs.docs.first.id, 
+            id: userDocs.docs.first.id,
             name: emailController.text,
             bio: passwordController.text,
             profilePictureUrl:
@@ -61,14 +104,13 @@ class LoginController extends GetxController {
     }
   }
 
-   Future<void> saveProfile(
+  Future<void> saveProfile(
     // String name,
     // String bio,
     String profilePictureUrl,
   ) async {
     try {
-      UserProfile? userSpProfile =
-          await userProfileSpRepo.getModel();
+      UserProfile? userSpProfile = await userProfileSpRepo.getModel();
 
       if (userSpProfile != null) {
         userProfile.value = UserProfile(

@@ -3,8 +3,10 @@ import 'package:auth_app1/config/flavor_config.dart';
 import 'package:auth_app1/config/routes.dart';
 import 'package:auth_app1/features/auth/domain/repos.dart';
 import 'package:auth_app1/features/auth/domain/utils/common_functions.dart';
+import 'package:auth_app1/features/auth/domain/utils/common_widgets.dart';
 import 'package:auth_app1/features/auth/presentation/controllers/home_controller.dart';
 import 'package:auth_app1/features/auth/presentation/screens/create_todo_screen.dart';
+import 'package:auth_app1/features/auth/presentation/screens/edit_todo_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -137,7 +139,8 @@ class HomeScreen extends GetView<HomeController> {
                     margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     child: ListTile(
                       onTap: () {
-                        Get.toNamed(editTodoView, arguments: todo);
+                        Get.to(()=> EditTodoScreen( oldTodo: todo,));
+                        // Get.toNamed(editTodoView, arguments: todo);
                       },
                       leading: Checkbox(
                         value: todo.isDone,
@@ -227,44 +230,44 @@ class HomeScreen extends GetView<HomeController> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Card(
-              color: Colors.deepPurpleAccent,
-              child: Padding(
-                padding: const EdgeInsets.all(6.0),
-                child: SizedBox(
-                  height: 40,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            FlavorConfig(flavor: Flavor.dev);
-                          },
-                          child: Text('Dev'),
-                        ),
-                        VerticalDivider(color: Colors.white),
-                        InkWell(
-                          onTap: () {
-                            FlavorConfig(flavor: Flavor.prod);
-                          },
-                          child: Text('Prod'),
-                        ),
-                        VerticalDivider(color: Colors.white),
+            // Card(
+            //   color: Colors.deepPurpleAccent,
+            //   child: Padding(
+            //     padding: const EdgeInsets.all(6.0),
+            //     child: SizedBox(
+            //       height: 40,
+            //       child: Padding(
+            //         padding: const EdgeInsets.all(8.0),
+            //         child: Row(
+            //           children: [
+            //             InkWell(
+            //               onTap: () {
+            //                 FlavorConfig(flavor: Flavor.dev);
+            //               },
+            //               child: Text('Dev'),
+            //             ),
+            //             VerticalDivider(color: Colors.white),
+            //             InkWell(
+            //               onTap: () {
+            //                 FlavorConfig(flavor: Flavor.prod);
+            //               },
+            //               child: Text('Prod'),
+            //             ),
+            //             VerticalDivider(color: Colors.white),
 
-                        InkWell(
-                          onTap: () {
-                            FlavorConfig(flavor: Flavor.qa);
-                          },
-                          child: Text('Qa'),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Spacer(),
+            //             InkWell(
+            //               onTap: () {
+            //                 FlavorConfig(flavor: Flavor.qa);
+            //               },
+            //               child: Text('Qa'),
+            //             ),
+            //           ],
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            // Spacer(),
 
             Card(
               color: Colors.red,

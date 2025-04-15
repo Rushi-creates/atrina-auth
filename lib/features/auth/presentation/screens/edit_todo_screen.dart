@@ -7,16 +7,13 @@ class EditTodoScreen extends StatelessWidget {
   final TodoController todoController = Get.find();
   final TextEditingController titleController = TextEditingController();
 
-  // final Todo oldTodo;
-  // EditTodoScreen({required this.oldTodo});
+  final Todo oldTodo;
+  EditTodoScreen({required this.oldTodo});
 
   @override
   Widget build(BuildContext context) {
-     final oldTodo = Get.arguments as Todo;
-    // Load the current title of the todo item
+    //  final oldTodo = Get.arguments as Todo;
     var currentTodo = todoController.todos.value.firstWhere((todo) => todo.id == oldTodo.id);
-
-    // Initialize the controller with the current title
     titleController.text = currentTodo.title;
 
     return Scaffold(
@@ -38,8 +35,8 @@ class EditTodoScreen extends StatelessWidget {
               onPressed: () {
                 String title = titleController.text.trim();
                 // if (title.isNotEmpty) {
-                  todoController.updateWholeTodo(oldTodo,currentTodo.copyWith(title: title) );  // Update the todo
-                  Get.back(); // Close the screen after updating
+                  todoController.updateWholeTodo(oldTodo,currentTodo.copyWith(title: title) );  
+                  Get.back(); 
                 // }
               },
               child: Text('Update To-Do'),

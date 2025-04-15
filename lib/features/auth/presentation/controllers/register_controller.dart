@@ -17,6 +17,47 @@ class RegisterController extends GetxController {
   TextEditingController  emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
+
+
+  final Rx<String> phoneError = ''.obs;
+  final Rx<String> passwordError = ''.obs;
+
+  void validatePhone(String value) {
+    if (value.isEmpty) {
+      phoneError.value = 'Phone number is required';
+    } else if (emailController.text.length != 10) {
+      phoneError.value = 'Phone number length should be of 10 digits';
+    } else if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+      phoneError.value = 'Please enter only numbers';
+    } else {
+      phoneError.value = '';
+    }
+  }
+
+  void validatePassword(String value) {
+    if (value.isEmpty) {
+      passwordError.value = 'Password is required';
+    } else if (value.length < 6) {
+      passwordError.value = 'Password must be at least 6 characters';
+    } else {
+      passwordError.value = '';
+    }
+  }
+
+  bool validateForm() {
+    validatePhone(emailController.text);
+    validatePassword(passwordController.text);
+
+    return phoneError.value.isEmpty && passwordError.value.isEmpty;
+  }
+
+  @override
+  void onClose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.onClose();
+  }
+
   Future<void> registerWithPhone(
     // String number, String password
     ) async {
