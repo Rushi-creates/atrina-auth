@@ -6,6 +6,8 @@ import 'package:auth_app1/features/auth/presentation/controllers/todo_controller
 import 'package:get/get.dart';
 
 class HomeController extends GetxController {
+  // var userProfile = await userProfileSpRepo.get();
+
   final TodoController todoController = Get.put(TodoController());
   final AuthController authController = Get.find();
   final ProfileController profileController = Get.find(); 

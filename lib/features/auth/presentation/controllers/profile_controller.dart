@@ -83,12 +83,10 @@ class ProfileController extends GetxController {
     }
   }
 
-  // Read the user's profile
   UserProfile? getUserProfile() {
     return userProfile.value;
   }
 
-  // Update the user's profile in Firestore
   Future<void> updateProfile(
     String name,
     String bio,

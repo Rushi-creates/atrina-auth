@@ -1,6 +1,7 @@
 // lib/screens/home_screen.dart
 import 'package:auth_app1/config/flavor_config.dart';
 import 'package:auth_app1/config/routes.dart';
+import 'package:auth_app1/features/auth/data/models/profile.dart';
 import 'package:auth_app1/features/auth/domain/repos.dart';
 import 'package:auth_app1/features/auth/domain/utils/common_functions.dart';
 import 'package:auth_app1/features/auth/domain/utils/common_widgets.dart';
@@ -13,7 +14,6 @@ import 'package:intl/intl.dart';
 
 class HomeScreen extends GetView<HomeController> {
   const HomeScreen({super.key});
-
 
   @override
   Widget build(BuildContext context) {
@@ -64,63 +64,69 @@ class HomeScreen extends GetView<HomeController> {
         child: Column(
           children: [
             Obx(() {
-              var profile = controller.profileController.getUserProfile();
+              UserProfile? profile =
+                  controller.profileController.getUserProfile();
+              print('==---------------- ${profile.toString()}');
 
-              if (profile == null) {
+              if (profile?.id == null) {
                 return Center(child: CircularProgressIndicator());
-              }
-
-              return Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text('Flavor is ${FlavorConfig.instance.name}'),
-                    SizedBox(height: 8),
-                    // Profile Image
-                    CircleAvatar(
-                      radius: 50,
-                      backgroundImage:
-                          profile.profilePictureUrl.isNotEmpty
-                              ? NetworkImage(profile.profilePictureUrl)
-                              : AssetImage('assets/default_profile.png')
-                                  as ImageProvider,
-                      backgroundColor: Colors.grey[300],
-                    ),
-                    SizedBox(height: 16),
-
-                    // Name
-                    Text(
-                      profile.name,
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
+              } else if (profile != null) {
+                print('=---------------- ${profile.toString()}');
+                print('=---------------- ${profile!.id.toString()}');
+                print('=---------------- ${profile.name.toString()}');
+                return Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text('Flavor is ${FlavorConfig.instance.name}'),
+                      SizedBox(height: 8),
+                      // Profile Image
+                      CircleAvatar(
+                        radius: 50,
+                        backgroundImage:
+                            profile!.profilePictureUrl.isNotEmpty
+                                ? NetworkImage(profile.profilePictureUrl)
+                                : AssetImage('assets/default_profile.png')
+                                    as ImageProvider,
+                        backgroundColor: Colors.grey[300],
                       ),
-                    ),
-                    SizedBox(height: 8),
+                      SizedBox(height: 16),
 
-                    // Bio
-                    // Text(
-                    //   profile.bio,
-                    //   style: TextStyle(fontSize: 16, color: Colors.grey[700]),
-                    //   textAlign: TextAlign.center,
-                    // ),
-                    // SizedBox(height: 16),
+                      // Name
+                      Text(
+                        profile.name,
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 8),
 
-                    // Image URL (Optional)
-                    // Text(
-                    //   "Profile Picture URL:",
-                    //   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                    // ),
-                    // Text(
-                    //   profile.profilePictureUrl,
-                    //   style: TextStyle(fontSize: 14, color: Colors.blue),
-                    //   overflow: TextOverflow.ellipsis,
-                    //   maxLines: 1,
-                    // ),
-                  ],
-                ),
-              );
+                      // Bio
+                      // Text(
+                      //   profile.bio,
+                      //   style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+                      //   textAlign: TextAlign.center,
+                      // ),
+                      // SizedBox(height: 16),
+
+                      // Image URL (Optional)
+                      // Text(
+                      //   "Profile Picture URL:",
+                      //   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      // ),
+                      // Text(
+                      //   profile.profilePictureUrl,
+                      //   style: TextStyle(fontSize: 14, color: Colors.blue),
+                      //   overflow: TextOverflow.ellipsis,
+                      //   maxLines: 1,
+                      // ),
+                    ],
+                  ),
+                );
+              }
+              return SizedBox(height: 10);
             }),
 
             Obx(() {
@@ -139,7 +145,7 @@ class HomeScreen extends GetView<HomeController> {
                     margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     child: ListTile(
                       onTap: () {
-                        Get.to(()=> EditTodoScreen( oldTodo: todo,));
+                        Get.to(() => EditTodoScreen(oldTodo: todo));
                         // Get.toNamed(editTodoView, arguments: todo);
                       },
                       leading: Checkbox(
@@ -270,7 +276,6 @@ class HomeScreen extends GetView<HomeController> {
             //   ),
             // ),
             // Spacer(),
-
             Card(
               color: Colors.red,
               child: Padding(

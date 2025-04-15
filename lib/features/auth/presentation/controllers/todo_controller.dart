@@ -1,28 +1,33 @@
-
+import 'package:auth_app1/features/auth/data/models/profile.dart';
 import 'package:auth_app1/features/auth/data/models/todo.dart';
+import 'package:auth_app1/features/auth/domain/repos.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uuid/uuid.dart';
 
 class TodoController extends GetxController {
+  // final String userId;
+  //  TodoController({required this.userId});
+
   static TodoController instance = Get.find();
-  
+
   final String _boxName = 'todos';
   late Box<Todo> _todoBox;
-  
+
   var todos = Rx<List<Todo>>([]);
-  
+
   int get todoCount => todos.value.length;
 
   @override
   void onInit() {
     super.onInit();
-    _initHive();
+    initHive();
   }
 
-  Future<void> _initHive() async {
-    _todoBox = await Hive.openBox<Todo>(_boxName);
+  Future<void> initHive() async {
+    var userProfile = await userProfileSpRepo.getModel();
+    _todoBox = await Hive.openBox<Todo>(_boxName + userProfile.name);
     fetchTodos();
   }
 
@@ -40,10 +45,10 @@ class TodoController extends GetxController {
         title: title,
         createdAt: DateTime.now(),
       );
-      
+
       await _todoBox.put(newTodo.id, newTodo);
       fetchTodos();
-      
+
       Get.snackbar(
         "Success",
         "Todo added successfully!",
@@ -78,10 +83,10 @@ class TodoController extends GetxController {
   Future<void> updateWholeTodo(Todo oldTodo, Todo newTodo) async {
     try {
       bool hasChanges = false;
-      
+
       if (oldTodo.title != newTodo.title) hasChanges = true;
       if (oldTodo.isDone != newTodo.isDone) hasChanges = true;
-      
+
       if (hasChanges) {
         await _todoBox.put(oldTodo.id, newTodo);
         fetchTodos();
@@ -99,7 +104,7 @@ class TodoController extends GetxController {
     try {
       await _todoBox.delete(id);
       fetchTodos();
-      
+
       Get.snackbar(
         "Success",
         "Todo deleted successfully!",
@@ -115,30 +120,29 @@ class TodoController extends GetxController {
   }
 
   Future<void> deleteCompletedTodos() async {
+    try {
+      final completedTodos =
+          _todoBox.values.where((todo) => todo.isDone).toList();
 
-  try {
-    final completedTodos = _todoBox.values.where((todo) => todo.isDone).toList();
+      if (completedTodos.isEmpty) return;
 
-    if(completedTodos.isEmpty) return;
+      for (var todo in completedTodos) {
+        await _todoBox.delete(todo.id);
+      }
 
-    for (var todo in completedTodos) {
-      await _todoBox.delete(todo.id);
+      fetchTodos();
+
+      Get.snackbar(
+        "Success",
+        "Completed todos deleted successfully!",
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } catch (e) {
+      Get.snackbar(
+        "Error",
+        "Failed to delete completed todos: $e",
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
-
-    fetchTodos();
-
-    Get.snackbar(
-      "Success",
-      "Completed todos deleted successfully!",
-      snackPosition: SnackPosition.BOTTOM,
-    );
-  } catch (e) {
-    Get.snackbar(
-      "Error",
-      "Failed to delete completed todos: $e",
-      snackPosition: SnackPosition.BOTTOM,
-    );
   }
-}
-
 }
