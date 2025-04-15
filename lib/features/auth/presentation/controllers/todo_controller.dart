@@ -18,6 +18,13 @@ class TodoController extends GetxController {
   var todos = Rx<List<Todo>>([]);
   var tempTodos = Rx<List<Todo>>([]);
 
+
+  RxInt todoPriority = RxInt(0);
+  Rx<DateTime?> todoDeadline = Rx<DateTime?>(DateTime.now());
+
+
+
+
   int get todoCount => todos.value.length;
 
   @override
@@ -39,11 +46,19 @@ class TodoController extends GetxController {
     update();
   }
 
-  void addTempTodo(String title) async {
+  void addTempTodo(String title, String? desc,
+  //  int? priority,
+  //  String? deadline,
+   String? labelList,
+    ) async {
     final newTodo = Todo(
       id: const Uuid().v4(),
       title: title,
+      description: desc,
+      priority: todoPriority.value,
       createdAt: DateTime.now(),
+      deadline: todoDeadline.value,
+      labelList: labelList,
     );
 
     final updatedList = List<Todo>.from(tempTodos.value);
@@ -76,30 +91,30 @@ class TodoController extends GetxController {
   }
 }
 
-  Future<void> addTodo(String title) async {
-    try {
-      final newTodo = Todo(
-        id: const Uuid().v4(),
-        title: title,
-        createdAt: DateTime.now(),
-      );
+  // Future<void> addTodo(String title) async {
+  //   try {
+  //     final newTodo = Todo(
+  //       id: const Uuid().v4(),
+  //       title: title,
+  //       createdAt: DateTime.now(),
+  //     );
 
-      await _todoBox.put(newTodo.id, newTodo);
-      fetchTodos();
+  //     await _todoBox.put(newTodo.id, newTodo);
+  //     fetchTodos();
 
-      // Get.snackbar(
-      //   "Success",
-      //   "Todo added successfully!",
-      //   snackPosition: SnackPosition.BOTTOM,
-      // );
-    } catch (e) {
-      Get.snackbar(
-        "Error",
-        "Failed to add todo: $e",
-        snackPosition: SnackPosition.BOTTOM,
-      );
-    }
-  }
+  //     // Get.snackbar(
+  //     //   "Success",
+  //     //   "Todo added successfully!",
+  //     //   snackPosition: SnackPosition.BOTTOM,
+  //     // );
+  //   } catch (e) {
+  //     Get.snackbar(
+  //       "Error",
+  //       "Failed to add todo: $e",
+  //       snackPosition: SnackPosition.BOTTOM,
+  //     );
+  //   }
+  // }
 
   Future<void> updateTodoStatus(String id, bool isDone) async {
     try {

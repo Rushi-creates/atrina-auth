@@ -169,8 +169,14 @@ class HomeScreen extends GetView<HomeController> {
                         ),
                       ),
                       // subtitle: Text(todo.createdAt.toIso8601String()),
-                      subtitle: Text(
-                        DateFormat.yMMMd().add_jm().format(todo.createdAt),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(todo.description ?? '', maxLines: 1, overflow: TextOverflow.ellipsis),
+                          Text(
+                            DateFormat.yMMMd().add_jm().format(todo.createdAt),
+                          ),
+                        ],
                       ),
 
                       trailing: IconButton(

@@ -7,6 +7,7 @@ import '../controllers/todo_controller.dart';
 class EditTodoScreen extends GetView<TodoController> {
   // final TodoController todoController = Get.find();
   final TextEditingController titleController = TextEditingController();
+  final TextEditingController descController = TextEditingController();
 
   final Todo? oldTodo;
 
@@ -35,34 +36,28 @@ class EditTodoScreen extends GetView<TodoController> {
         title: Text(oldTodo == null ? 'Create To-Do' : 'Edit To-Do'),
         actions: [
           // oldTodo == null
-        ElevatedButton(
-  onPressed: () {
-    String title = titleController.text.trim();
+          ElevatedButton(
+            onPressed: () {
+              String title = titleController.text.trim();
+              String desc = descController.text.trim();
 
-    if (oldTodo == null) {
-      // For creating new todos
-      if (title.isNotEmpty) {
-        // First add the current title as a temp todo
-        print("Adding current title to temp todos");
-        controller.addTempTodo(title);
-      }
-      
-      // Then save all temp todos
-      print("Now saving all temp todos: ${controller.tempTodos.value.length}");
-      controller.addTodosFromTemp();
-    } else {
-      // For updating existing todo
-      controller.updateWholeTodo(
-        oldTodo!,
-        currentTodo!.copyWith(title: title),
-      );
-    }
-    
-    controller.removeAllTempTodo();
-    Get.back();
-  },
-  child: Text(oldTodo == null ? 'Confirm' : 'Update To-Do'),
-),  // : SizedBox(),
+              if (oldTodo == null) {
+                if (title.isNotEmpty) {
+                  controller.addTempTodo(title, desc, null);
+                }
+                controller.addTodosFromTemp();
+              } else {
+                controller.updateWholeTodo(
+                  oldTodo!,
+                  currentTodo!.copyWith(title: title),
+                );
+              }
+
+              controller.removeAllTempTodo();
+              Get.back();
+            },
+            child: Text(oldTodo == null ? 'Confirm' : 'Update To-Do'),
+          ), // : SizedBox(),
         ],
       ),
       body: Padding(
@@ -81,17 +76,174 @@ class EditTodoScreen extends GetView<TodoController> {
                     horizontal: 12.0,
                   ),
                 ),
-                maxLines: 10,
+                maxLines: 5,
                 textAlignVertical: TextAlignVertical.top,
               ),
               SizedBox(height: 20),
+              TextField(
+                controller: descController,
+                decoration: InputDecoration(
+                  labelText: 'To-Do description',
+                  border: OutlineInputBorder(),
+                  contentPadding: EdgeInsets.symmetric(
+                    vertical: 16.0,
+                    horizontal: 12.0,
+                  ),
+                ),
+                maxLines: 5,
+                textAlignVertical: TextAlignVertical.top,
+              ),
+              SizedBox(height: 20),
+              Card(
+                color: Colors.deepPurpleAccent,
+                child: Padding(
+                  padding: const EdgeInsets.all(6.0),
+                  child: SizedBox(
+                    height: 50,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Obx(
+                        () => Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                controller.todoPriority.value = 3;
+                              },
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 20,
+                                  vertical: 10,
+                                ),
+                                decoration: BoxDecoration(
+                                  border:
+                                      controller.todoPriority.value == 3
+                                          ? Border.all(
+                                            color: Colors.white,
+                                            width: 2,
+                                          )
+                                          : null,
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: Text(
+                                  'High',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ),
+                            VerticalDivider(color: Colors.white),
+                            InkWell(
+                              onTap: () {
+                                controller.todoPriority.value = 2;
+                              },
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 20,
+                                  vertical: 10,
+                                ),
+                                decoration: BoxDecoration(
+                                  border:
+                                      controller.todoPriority.value == 2
+                                          ? Border.all(
+                                            color: Colors.white,
+                                            width: 2,
+                                          )
+                                          : null,
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: Text(
+                                  'Med',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ),
+                            VerticalDivider(color: Colors.white),
+                            InkWell(
+                              onTap: () {
+                                controller.todoPriority.value = 1;
+                              },
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 20,
+                                  vertical: 10,
+                                ),
+                                decoration: BoxDecoration(
+                                  border:
+                                      controller.todoPriority.value == 1
+                                          ? Border.all(
+                                            color: Colors.white,
+                                            width: 2,
+                                          )
+                                          : null,
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: Text(
+                                  'Low',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+
+              ////
+              ///
+              ///
+              SizedBox(height: 20),
+              Obx(() {
+                return InkWell(
+                  onTap: () async {
+                    DateTime now = DateTime.now();
+                    DateTime? picked = await showDatePicker(
+                      context: context,
+                      initialDate: controller.todoDeadline.value ?? now,
+                      firstDate: now,
+                      lastDate: DateTime(now.year + 5),
+                    );
+                    if (picked != null) {
+                      controller.todoDeadline.value = picked;
+                    }
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 16.0,
+                      horizontal: 12.0,
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(4.0),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          controller.todoDeadline.value != null
+                              ? DateFormat.yMMMd().format(
+                                controller.todoDeadline.value!,
+                              )
+                              : 'Select Deadline',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                        Icon(Icons.calendar_today, size: 20),
+                      ],
+                    ),
+                  ),
+                );
+              }),
 
               if (oldTodo == null)
                 ElevatedButton(
                   onPressed: () {
                     String title = titleController.text.trim();
-                    controller.addTempTodo(title);
+                    String desc = descController.text.trim();
+                    controller.addTempTodo(title, desc, null);
                     titleController.clear();
+                    descController.clear();
 
                     // Get.back();
                   },
