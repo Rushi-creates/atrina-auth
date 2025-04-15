@@ -34,7 +34,7 @@ class PostView extends GetView<PostController> {
             final post = controller.posts[index];
             return
 
-            //  controller.status.value.isLoading
+            //  controller.status.value.isLoading && index == post.id
             //     ? const Center(child: CircularProgressIndicator())
             //     :
                  ListTile(

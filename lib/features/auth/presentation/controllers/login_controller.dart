@@ -23,6 +23,13 @@ class LoginController extends GetxController {
   void validatePhone(String value) {
     if (value.isEmpty) {
       phoneError.value = 'Phone number is required';
+    } else if (emailController.text.startsWith('0') ||
+        emailController.text.startsWith('1') ||
+        emailController.text.startsWith('2') ||
+        emailController.text.startsWith('3') ||
+        emailController.text.startsWith('4') ||
+        emailController.text.startsWith('5')) {
+      phoneError.value = 'Phone number should either start with 6,7,8,9';
     } else if (emailController.text.length != 10) {
       phoneError.value = 'Phone number length should be of 10 digits';
     } else if (!RegExp(r'^[0-9]+$').hasMatch(value)) {

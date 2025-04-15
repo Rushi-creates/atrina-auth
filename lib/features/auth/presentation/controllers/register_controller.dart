@@ -13,11 +13,9 @@ class RegisterController extends GetxController {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   Rx<UserProfile?> userProfile = Rx<UserProfile?>(null);
-  
-  TextEditingController  emailController = TextEditingController();
+
+  TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-
-
 
   final Rx<String> phoneError = ''.obs;
   final Rx<String> passwordError = ''.obs;
@@ -25,6 +23,13 @@ class RegisterController extends GetxController {
   void validatePhone(String value) {
     if (value.isEmpty) {
       phoneError.value = 'Phone number is required';
+    } else if (emailController.text.startsWith('0') ||
+        emailController.text.startsWith('1') ||
+        emailController.text.startsWith('2') ||
+        emailController.text.startsWith('3') ||
+        emailController.text.startsWith('4') ||
+        emailController.text.startsWith('5')) {
+      phoneError.value = 'Phone number should either start with 6,7,8,9';
     } else if (emailController.text.length != 10) {
       phoneError.value = 'Phone number length should be of 10 digits';
     } else if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
@@ -60,7 +65,7 @@ class RegisterController extends GetxController {
 
   Future<void> registerWithPhone(
     // String number, String password
-    ) async {
+  ) async {
     try {
       var userDoc =
           await FirebasePaths.numberProfiles
@@ -77,7 +82,10 @@ class RegisterController extends GetxController {
         return;
       }
 
-      Map<String, dynamic> userMap = {'number': emailController.text, 'password': passwordController.text};
+      Map<String, dynamic> userMap = {
+        'number': emailController.text,
+        'password': passwordController.text,
+      };
 
       UserProfile userProfile = UserProfile(
         id: emailController.text,
@@ -104,7 +112,7 @@ class RegisterController extends GetxController {
 
   Future<void> loginWithPhone(
     // String number, String password
-    ) async {
+  ) async {
     try {
       var userDocs =
           await FirebasePaths.numberProfiles
