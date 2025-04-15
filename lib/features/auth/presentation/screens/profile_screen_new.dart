@@ -62,7 +62,7 @@ class ProfileView extends StatelessWidget {
                     ),
                             Obx(
                               () => DropdownButton<int>(
-                                icon: Icon(Icons.settings, color: Colors.white),
+                                icon: Icon(Icons.switch_access_shortcut, color: Colors.white),
                                 underline: SizedBox(),
                                 value: themeController.themeIndex,
                                 onChanged: (int? value) {

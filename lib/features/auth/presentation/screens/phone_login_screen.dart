@@ -50,9 +50,9 @@ class PhoneLoginScreen extends GetView<LoginController> {
 
             ElevatedButton(
               onPressed: () async {
-                await controller.loginWithPhone();
 
                 if (controller.validateForm()) {
+                await controller.loginWithPhone();
                   await controller.saveProfile(
                     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSEriWalt3rgigUMC63Bhg4viP_gHy3dHBidlLGVY2ds5rcQO90qjHgXs&s',
                   );

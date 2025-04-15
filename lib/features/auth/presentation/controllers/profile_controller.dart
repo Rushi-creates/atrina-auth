@@ -20,7 +20,6 @@ class ProfileController extends GetxController {
     _loadUserProfile();
   }
 
-  // Load the user's profile from Firestore
   void _loadUserProfile() async {
     // User? currentUser = auth.currentUser;
 
@@ -30,23 +29,16 @@ class ProfileController extends GetxController {
         userProfileSpRepo.getModel();
     // ));
     if (userSpProfile != null) {
-      // Fetch the document from Firestore
-      // DocumentSnapshot userDoc = await firestore.collection('profiles').doc(currentUser.uid).get();
       DocumentSnapshot userDoc =
           await firestore.collection('profiles').doc(userSpProfile.id).get();
 
-      // Check if the document exists
       if (userDoc.exists) {
-        // Extract data from the DocumentSnapshot and convert it into UserProfile
         Map<String, dynamic> data = userDoc.data() as Map<String, dynamic>;
-
-        // Pass the extracted data to the fromMap method
         userProfile.value = UserProfile.fromMap(data);
       }
     }
   }
 
-  // Create or update a user's profile in Firestore
   Future<void> saveProfile(
     String name,
     String bio,

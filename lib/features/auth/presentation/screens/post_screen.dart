@@ -13,10 +13,10 @@ class PostView extends GetView<PostController> {
     return Scaffold(
       appBar: AppBar(title: const Text("Api Posts")),
       body: Obx(() {
-        if (controller.status.value.isLoading) {
-          return const Center(child: CircularProgressIndicator());
-        }
-         else
+        // if (controller.status.value.isLoading) {
+        //   return const Center(child: CircularProgressIndicator());
+        // }
+        //  else
         if (controller.status.value.isEmpty) {
           return const Center(child: Text("No posts available"));
         }
@@ -32,12 +32,14 @@ class PostView extends GetView<PostController> {
           itemCount: controller.posts.length,
           itemBuilder: (context, index) {
             final post = controller.posts[index];
+            //  final index = posts.indexWhere((p) => p.id == id);
             return
 
-            //  controller.status.value.isLoading && index == post.id
-            //     ? const Center(child: CircularProgressIndicator())
-            //     :
+             controller.status.value.isLoading && index == controller.loadingIndex.value
+                ? const Center(child: CircularProgressIndicator())
+                :
                  ListTile(
+                  key: Key(index.toString()),
                   title: Text(post.title, maxLines: 1),
                   subtitle: Text(post.body, maxLines: 2),
                   trailing: IconButton(

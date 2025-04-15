@@ -7,17 +7,25 @@ class EditTodoScreen extends StatelessWidget {
   final TodoController todoController = Get.find();
   final TextEditingController titleController = TextEditingController();
 
-  final Todo oldTodo;
-  EditTodoScreen({required this.oldTodo});
+  final Todo? oldTodo;
+
+  Todo? currentTodo;
+  EditTodoScreen({this.oldTodo});
 
   @override
   Widget build(BuildContext context) {
-    //  final oldTodo = Get.arguments as Todo;
-    var currentTodo = todoController.todos.value.firstWhere((todo) => todo.id == oldTodo.id);
-    titleController.text = currentTodo.title;
+    if (oldTodo != null) {
+      //  final oldTodo = Get.arguments as Todo;
+      currentTodo = todoController.todos.value.firstWhere(
+        (todo) => todo.id == oldTodo!.id,
+      );
+      titleController.text = currentTodo!.title;
+    }
 
     return Scaffold(
-      appBar: AppBar(title: Text('Edit To-Do')),
+      appBar: AppBar(
+        title: Text(oldTodo == null ? 'Create To-Do' : 'Edit To-Do'),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -28,18 +36,34 @@ class EditTodoScreen extends StatelessWidget {
               decoration: InputDecoration(
                 labelText: 'To-Do Title',
                 border: OutlineInputBorder(),
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 16.0,
+                  horizontal: 12.0,
+                ),
               ),
+              maxLines: 10,
+              textAlignVertical: TextAlignVertical.top,
             ),
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 String title = titleController.text.trim();
-                // if (title.isNotEmpty) {
-                  todoController.updateWholeTodo(oldTodo,currentTodo.copyWith(title: title) );  
-                  Get.back(); 
-                // }
+
+                if (oldTodo == null) {
+                  if (title.isNotEmpty) {
+                    todoController.addTodo(title);
+                  }
+                } else {
+                  // if (title.isNotEmpty) {
+                  todoController.updateWholeTodo(
+                    oldTodo!,
+                    currentTodo!.copyWith(title: title),
+                  );
+                  // }
+                }
+                Get.back();
               },
-              child: Text('Update To-Do'),
+              child: Text(oldTodo == null ? 'Add To-Do' : 'Update To-Do'),
             ),
           ],
         ),

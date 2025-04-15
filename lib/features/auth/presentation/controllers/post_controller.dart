@@ -5,8 +5,9 @@ import 'package:get/get.dart';
 class PostController extends GetxController {
   final ApiProvider apiProvider = ApiProvider();
 
-  var posts = <Post>[].obs;
-  var status = Rx<RxStatus>(RxStatus.empty()); 
+  RxList<Post> posts = <Post>[].obs;
+  Rx<RxStatus> status = Rx<RxStatus>(RxStatus.empty());
+  RxInt loadingIndex = 0.obs;
 
   @override
   void onInit() {
@@ -42,11 +43,11 @@ class PostController extends GetxController {
 
   void updatePost(int id, Post post) async {
     try {
-      status.value = RxStatus.loading();
+      // status.value = RxStatus.loading();
       final updatedPost = await apiProvider.updatePost(id, post);
-      final index = posts.indexWhere((p) => p.id == id);
-      if (index != -1) {
-        posts[index] = updatedPost;
+      loadingIndex.value = posts.indexWhere((p) => p.id == id);
+      if (loadingIndex.value != -1) {
+        posts[loadingIndex.value] = updatedPost;
       }
       status.value = RxStatus.success();
     } catch (e) {
@@ -56,7 +57,7 @@ class PostController extends GetxController {
 
   void deletePost(int id) async {
     try {
-      status.value = RxStatus.loading();
+      // status.value = RxStatus.loading();
       await apiProvider.deletePost(id);
       posts.removeWhere((p) => p.id == id);
       if (posts.isEmpty) {

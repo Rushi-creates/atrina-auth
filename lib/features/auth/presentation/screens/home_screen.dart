@@ -153,6 +153,8 @@ class HomeScreen extends GetView<HomeController> {
                       ),
                       title: Text(
                         todo.title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           decoration:
                               todo.isDone
@@ -292,7 +294,8 @@ class HomeScreen extends GetView<HomeController> {
             ),
             FloatingActionButton(
               onPressed: () {
-                Get.to(() => CreateTodoScreen());
+                Get.to(() => EditTodoScreen());
+                // Get.to(() => CreateTodoScreen());
               },
               child: Icon(Icons.add),
             ),

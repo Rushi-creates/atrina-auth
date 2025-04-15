@@ -39,9 +39,9 @@ class PhoneRegisterScreen extends GetView<RegisterController> {
             
             ElevatedButton(
               onPressed: () async {
-                await controller.registerWithPhone();
                 
                 if (controller.validateForm()) {
+                await controller.registerWithPhone();
                 // if (controller.phoneError.value.isEmpty && controller.passwordError.value.isEmpty) {
                   await controller.saveProfile(
                     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSEriWalt3rgigUMC63Bhg4viP_gHy3dHBidlLGVY2ds5rcQO90qjHgXs&s',
