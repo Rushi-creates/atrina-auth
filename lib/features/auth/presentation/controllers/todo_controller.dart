@@ -16,6 +16,7 @@ class TodoController extends GetxController {
   late Box<Todo> _todoBox;
 
   var todos = Rx<List<Todo>>([]);
+  var tempTodos = Rx<List<Todo>>([]);
 
   int get todoCount => todos.value.length;
 
@@ -38,6 +39,43 @@ class TodoController extends GetxController {
     update();
   }
 
+  void addTempTodo(String title) async {
+    final newTodo = Todo(
+      id: const Uuid().v4(),
+      title: title,
+      createdAt: DateTime.now(),
+    );
+
+    final updatedList = List<Todo>.from(tempTodos.value);
+    updatedList.add(newTodo);
+    tempTodos.value = updatedList;
+    
+  }
+
+ Future<void> addTodosFromTemp() async {
+  try {
+    for (var todo in tempTodos.value) {
+      await _todoBox.put(todo.id, todo);
+    }
+
+    tempTodos.value = [];
+
+    fetchTodos();
+
+    Get.snackbar(
+      "Success",
+      "All temp todos added successfully!",
+      snackPosition: SnackPosition.BOTTOM,
+    );
+  } catch (e) {
+    Get.snackbar(
+      "Error",
+      "Failed to add todos: $e",
+      snackPosition: SnackPosition.BOTTOM,
+    );
+  }
+}
+
   Future<void> addTodo(String title) async {
     try {
       final newTodo = Todo(
@@ -49,11 +87,11 @@ class TodoController extends GetxController {
       await _todoBox.put(newTodo.id, newTodo);
       fetchTodos();
 
-      Get.snackbar(
-        "Success",
-        "Todo added successfully!",
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      // Get.snackbar(
+      //   "Success",
+      //   "Todo added successfully!",
+      //   snackPosition: SnackPosition.BOTTOM,
+      // );
     } catch (e) {
       Get.snackbar(
         "Error",
@@ -98,6 +136,16 @@ class TodoController extends GetxController {
         snackPosition: SnackPosition.BOTTOM,
       );
     }
+  }
+
+  void removeTempTodo(int index) async {
+    final updatedList = List<Todo>.from(tempTodos.value);
+    updatedList.removeAt(index);
+    tempTodos.value = updatedList;
+  }
+
+  void removeAllTempTodo() async {
+    tempTodos.value = [];
   }
 
   Future<void> deleteTodo(String id) async {
