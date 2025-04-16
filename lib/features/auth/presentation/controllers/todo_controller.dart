@@ -15,8 +15,8 @@ class TodoController extends GetxController {
   final String _boxName = 'todos';
   late Box<Todo> _todoBox;
 
-  var todos = Rx<List<Todo>>([]);
-  var tempTodos = Rx<List<Todo>>([]);
+  Rx<List<Todo>> todos = Rx<List<Todo>>([]);
+  Rx<List<Todo>> tempTodos = Rx<List<Todo>>([]);
 
 
   RxInt todoPriority = RxInt(0);
@@ -34,8 +34,8 @@ class TodoController extends GetxController {
   }
 
   Future<void> initHive() async {
-    var userProfile = await userProfileSpRepo.getModel();
-    _todoBox = await Hive.openBox<Todo>(_boxName + userProfile.name);
+    UserProfile? userProfile = await userProfileSpRepo.getModel() as UserProfile?;
+    _todoBox = await Hive.openBox<Todo>(_boxName + (userProfile?.name ?? ' '));
     fetchTodos();
   }
 
@@ -69,7 +69,7 @@ class TodoController extends GetxController {
 
  Future<void> addTodosFromTemp() async {
   try {
-    for (var todo in tempTodos.value) {
+    for (Todo todo in tempTodos.value) {
       await _todoBox.put(todo.id, todo);
     }
 
@@ -189,7 +189,7 @@ class TodoController extends GetxController {
 
       if (completedTodos.isEmpty) return;
 
-      for (var todo in completedTodos) {
+      for (Todo todo in completedTodos) {
         await _todoBox.delete(todo.id);
       }
 

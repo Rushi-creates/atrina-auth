@@ -12,11 +12,11 @@ class PhoneLoginScreen extends GetView<LoginController> {
       appBar: AppBar(title: const Text("Login with Phone number")),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Obx(
-              () => TextFormField(
-                controller: controller.emailController,
+        child: Obx(
+          () => Column(
+            children: [
+              TextFormField(
+                controller: controller.phoneController,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   labelText: "Number",
@@ -27,12 +27,10 @@ class PhoneLoginScreen extends GetView<LoginController> {
                 ),
                 onChanged: (value) => controller.validatePhone(value),
               ),
-            ),
 
-            const SizedBox(height: 16),
+              const SizedBox(height: 16),
 
-            Obx(
-              () => TextFormField(
+              TextFormField(
                 controller: controller.passwordController,
                 decoration: InputDecoration(
                   labelText: "Password",
@@ -44,30 +42,29 @@ class PhoneLoginScreen extends GetView<LoginController> {
                 obscureText: true,
                 onChanged: (value) => controller.validatePassword(value),
               ),
-            ),
 
-            const SizedBox(height: 20),
+              const SizedBox(height: 20),
 
-            ElevatedButton(
-              onPressed: () async {
+              ElevatedButton(
+                onPressed: () async {
+                  if (controller.validateForm()) {
+                    await controller.loginWithPhone();
+                    await controller.saveProfile(
+                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSEriWalt3rgigUMC63Bhg4viP_gHy3dHBidlLGVY2ds5rcQO90qjHgXs&s',
+                    );
+                  }
+                },
+                child: const Text("Login"),
+              ),
 
-                if (controller.validateForm()) {
-                await controller.loginWithPhone();
-                  await controller.saveProfile(
-                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSEriWalt3rgigUMC63Bhg4viP_gHy3dHBidlLGVY2ds5rcQO90qjHgXs&s',
-                  );
-                }
-              },
-              child: const Text("Login"),
-            ),
-
-            TextButton(
-              onPressed: () {
-                Get.toNamed(registerView);
-              },
-              child: const Text("Don't have an account? Register"),
-            ),
-          ],
+              TextButton(
+                onPressed: () {
+                  Get.toNamed(registerView);
+                },
+                child: const Text("Don't have an account? Register"),
+              ),
+            ],
+          ),
         ),
       ),
     );

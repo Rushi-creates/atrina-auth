@@ -5,10 +5,16 @@ import 'package:auth_app1/features/auth/presentation/controllers/profile_control
 import 'package:auth_app1/features/auth/presentation/controllers/todo_controller.dart';
 import 'package:get/get.dart';
 
-class HomeController extends GetxController {
-  // var userProfile = await userProfileSpRepo.get();
+// class HomeController extends GetxController {
+//   // var userProfile = await userProfileSpRepo.get();
 
-  final TodoController todoController = Get.put(TodoController());
+//   final TodoController todoController = Get.put(TodoController());
+//   final AuthController authController = Get.find();
+//   final ProfileController profileController = Get.find(); 
+// }
+
+class HomeController extends GetxController {
+  final TodoController todoController = Get.find();
   final AuthController authController = Get.find();
-  final ProfileController profileController = Get.find(); 
+  final ProfileController profileController = Get.find();
 }

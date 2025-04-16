@@ -9,12 +9,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class RegisterController extends GetxController {
-  FirebaseAuth auth = FirebaseAuth.instance;
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  // FirebaseAuth auth = FirebaseAuth.instance;
+  // FirebaseFirestore firestore = FirebaseFirestore.instance;
+
 
   Rx<UserProfile?> userProfile = Rx<UserProfile?>(null);
 
-  TextEditingController emailController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
   final Rx<String> phoneError = ''.obs;
@@ -23,14 +24,14 @@ class RegisterController extends GetxController {
   void validatePhone(String value) {
     if (value.isEmpty) {
       phoneError.value = 'Phone number is required';
-    } else if (emailController.text.startsWith('0') ||
-        emailController.text.startsWith('1') ||
-        emailController.text.startsWith('2') ||
-        emailController.text.startsWith('3') ||
-        emailController.text.startsWith('4') ||
-        emailController.text.startsWith('5')) {
+    } else if (phoneController.text.startsWith('0') ||
+        phoneController.text.startsWith('1') ||
+        phoneController.text.startsWith('2') ||
+        phoneController.text.startsWith('3') ||
+        phoneController.text.startsWith('4') ||
+        phoneController.text.startsWith('5')) {
       phoneError.value = 'Phone number should either start with 6,7,8,9';
-    } else if (emailController.text.length != 10) {
+    } else if (phoneController.text.length != 10) {
       phoneError.value = 'Phone number length should be of 10 digits';
     } else if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
       phoneError.value = 'Please enter only numbers';
@@ -50,18 +51,18 @@ class RegisterController extends GetxController {
   }
 
   bool validateForm() {
-    validatePhone(emailController.text);
+    validatePhone(phoneController.text);
     validatePassword(passwordController.text);
 
     return phoneError.value.isEmpty && passwordError.value.isEmpty;
   }
 
-  @override
-  void onClose() {
-    emailController.dispose();
-    passwordController.dispose();
-    super.onClose();
-  }
+  // @override
+  // void onClose() {
+  //   emailController.dispose();
+  //   passwordController.dispose();
+  //   super.onClose();
+  // }
 
   Future<void> registerWithPhone(
     // String number, String password
@@ -69,7 +70,7 @@ class RegisterController extends GetxController {
     try {
       var userDoc =
           await FirebasePaths.numberProfiles
-              .where('number', isEqualTo: emailController.text)
+              .where('number', isEqualTo: phoneController.text)
               .get();
 
       if (userDoc.docs.isNotEmpty) {
@@ -83,19 +84,19 @@ class RegisterController extends GetxController {
       }
 
       Map<String, dynamic> userMap = {
-        'number': emailController.text,
+        'number': phoneController.text,
         'password': passwordController.text,
       };
 
       UserProfile userProfile = UserProfile(
-        id: emailController.text,
-        name: emailController.text,
+        id: phoneController.text,
+        name: phoneController.text,
         bio: passwordController.text,
         profilePictureUrl:
             'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkoKnnYEns44I5HqlyDuoHdesuKqwLV9dRk28IqUbguJudG7-eAQKYacIzUJEgwNQoLD5Y&s',
       );
 
-      await FirebasePaths.numberProfiles.doc(emailController.text).set(userMap);
+      await FirebasePaths.numberProfiles.doc(phoneController.text).set(userMap);
       await userProfileSpRepo.set(userProfile);
       await setInitialScreen();
 
@@ -110,40 +111,40 @@ class RegisterController extends GetxController {
     }
   }
 
-  Future<void> loginWithPhone(
-    // String number, String password
-  ) async {
-    try {
-      var userDocs =
-          await FirebasePaths.numberProfiles
-              .where('number', isEqualTo: emailController.text)
-              .get();
+  // Future<void> loginWithPhone(
+  //   // String number, String password
+  // ) async {
+  //   try {
+  //     var userDocs =
+  //         await FirebasePaths.numberProfiles
+  //             .where('number', isEqualTo: emailController.text)
+  //             .get();
 
-      if (userDocs.docs.isNotEmpty) {
-        Map<String, dynamic> userData =
-            userDocs.docs.first.data() as Map<String, dynamic>;
+  //     if (userDocs.docs.isNotEmpty) {
+  //       Map<String, dynamic> userData =
+  //           userDocs.docs.first.data() as Map<String, dynamic>;
 
-        if (userData['password'] == passwordController.text) {
-          UserProfile userProfile = UserProfile(
-            id: userDocs.docs.first.id,
-            name: emailController.text,
-            bio: passwordController.text,
-            profilePictureUrl:
-                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkoKnnYEns44I5HqlyDuoHdesuKqwLV9dRk28IqUbguJudG7-eAQKYacIzUJEgwNQoLD5Y&s',
-          );
+  //       if (userData['password'] == passwordController.text) {
+  //         UserProfile userProfile = UserProfile(
+  //           id: userDocs.docs.first.id,
+  //           name: emailController.text,
+  //           bio: passwordController.text,
+  //           profilePictureUrl:
+  //               'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkoKnnYEns44I5HqlyDuoHdesuKqwLV9dRk28IqUbguJudG7-eAQKYacIzUJEgwNQoLD5Y&s',
+  //         );
 
-          await userProfileSpRepo.set(userProfile);
-          await setInitialScreen();
-        } else {
-          showErrorSnackbar("Incorrect password");
-        }
-      } else {
-        showErrorSnackbar("User does not exist");
-      }
-    } catch (e) {
-      showErrorSnackbar(e.toString());
-    }
-  }
+  //         await userProfileSpRepo.set(userProfile);
+  //         await setInitialScreen();
+  //       } else {
+  //         showErrorSnackbar("Incorrect password");
+  //       }
+  //     } else {
+  //       showErrorSnackbar("User does not exist");
+  //     }
+  //   } catch (e) {
+  //     showErrorSnackbar(e.toString());
+  //   }
+  // }
 
   Future<void> saveProfile(
     // String name,
@@ -156,13 +157,13 @@ class RegisterController extends GetxController {
       if (userSpProfile != null) {
         userProfile.value = UserProfile(
           id: userSpProfile.id,
-          name: emailController.text,
+          name: phoneController.text,
           bio: passwordController.text,
           profilePictureUrl: profilePictureUrl,
         );
 
         await FirebasePaths.profiles.doc(userSpProfile.id).set({
-          'name': emailController.text,
+          'name': phoneController.text,
           'bio': passwordController.text,
           'profilePictureUrl': profilePictureUrl,
         });

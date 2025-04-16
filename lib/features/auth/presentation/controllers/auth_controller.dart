@@ -16,9 +16,9 @@ class AuthController extends GetxController {
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  var user = Rx<UserProfile?>(null);
+  Rx<UserProfile?> user = Rx<UserProfile?>(null);
 
-  var spUser;
+  UserProfile? spUser;
 
   // @override
   // void onReady() {

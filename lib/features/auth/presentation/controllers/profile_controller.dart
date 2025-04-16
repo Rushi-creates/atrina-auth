@@ -12,7 +12,7 @@ class ProfileController extends GetxController {
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  var userProfile = Rx<UserProfile?>(null);
+  Rx<UserProfile?> userProfile = Rx<UserProfile?>(null);
 
   @override
   void onReady() {

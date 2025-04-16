@@ -47,10 +47,10 @@ import 'package:get/get.dart';
 
 class TodoFirebaseController extends GetxController {
   static TodoFirebaseController instance = Get.find();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  // final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  var todos = Rx<List<Todo>>([]);
+  Rx<List<Todo>> todos = Rx<List<Todo>>([]);
 
   int get todoCount => todos.value.length;
 

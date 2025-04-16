@@ -56,6 +56,7 @@ import 'package:auth_app1/core/utils/device_information.dart';
 import 'package:auth_app1/features/auth/data/models/todo.dart';
 import 'package:auth_app1/features/auth/domain/repos.dart';
 import 'package:auth_app1/features/auth/domain/shared_preference_helper.dart';
+import 'package:auth_app1/features/auth/presentation/bindings/initial_binding.dart';
 import 'package:auth_app1/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:auth_app1/features/auth/presentation/controllers/home_controller.dart';
 import 'package:auth_app1/features/auth/presentation/controllers/login_controller.dart';
@@ -63,6 +64,7 @@ import 'package:auth_app1/features/auth/presentation/controllers/post_controller
 import 'package:auth_app1/features/auth/presentation/controllers/profile_controller.dart';
 import 'package:auth_app1/features/auth/presentation/controllers/register_controller.dart';
 import 'package:auth_app1/features/auth/presentation/controllers/theme_controller.dart';
+import 'package:auth_app1/features/auth/presentation/controllers/todo_controller.dart';
 import 'package:auth_app1/features/auth/presentation/screens/login_screen.dart';
 import 'package:auth_app1/features/auth/presentation/screens/phone_login_screen.dart';
 import 'package:auth_app1/features/auth/presentation/screens/register_screen.dart';
@@ -78,7 +80,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // await Firebase.initializeApp();
 
-  /// Config the flavor
+  /// flavor
   String packageName = await DeviceInformation().getAppPackageName();
   if (packageName.contains('prod')) {
     FlavorConfig(flavor: Flavor.prod);
@@ -98,21 +100,21 @@ void main() async {
   await GetStorage.init();
   await SharedPreferencesHelper.init();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  Get.put(AuthController());
-  Get.put(LoginController());
-  Get.put(RegisterController());
-  Get.put(ProfileController());
-  Get.put(HomeController());
-  Get.put(ThemeController());
-  Get.put(PostController());
+  // Get.put(AuthController());
+  // Get.put(LoginController());
+  // Get.put(RegisterController());
+  // Get.put(ProfileController());
+  // Get.put(HomeController());
+  // Get.put(ThemeController());
+  // Get.put(PostController());
 
-  var store = await userProfileSpRepo.get();
-  print(store);
+  // var store = await userProfileSpRepo.get();
+  // print(store);
   runApp(MainApp());
 }
 
 class MainApp extends StatelessWidget {
-  // const MainApp({super.key});
+  MainApp({super.key});
 
   final ThemeController themeController = Get.put(ThemeController());
 
@@ -124,6 +126,7 @@ class MainApp extends StatelessWidget {
         theme: themeController.themes[themeController.themeIndex],
         // home: PhoneLoginScreen(),
         initialRoute: loginView,
+        initialBinding: InitialBinding(),
         getPages: routes,
       ),
     );

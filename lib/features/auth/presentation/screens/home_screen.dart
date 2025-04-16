@@ -111,7 +111,7 @@ class HomeScreen extends GetView<HomeController> {
                       // ),
                       // SizedBox(height: 16),
 
-                      // Image URL (Optional)
+                      // Image URL
                       // Text(
                       //   "Profile Picture URL:",
                       //   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
@@ -144,6 +144,20 @@ class HomeScreen extends GetView<HomeController> {
                   return Card(
                     margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     child: ListTile(
+                      onLongPress:
+                          () => showGetDialog(
+                            Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Title: ${todo.title}'),
+                                Text('Description: ${todo.description ?? ''}'),
+                                Text('Created at: ${todo.createdAt ?? ''}'),
+                                Text('Deadline: ${todo.deadline ?? ''}'),
+                                Text('Priority: ${todo.priority ?? ''}'),
+                              ],
+                            ),
+                          ),
                       onTap: () {
                         Get.to(() => EditTodoScreen(oldTodo: todo));
                         // Get.toNamed(editTodoView, arguments: todo);
@@ -172,9 +186,19 @@ class HomeScreen extends GetView<HomeController> {
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(todo.description ?? '', maxLines: 1, overflow: TextOverflow.ellipsis),
+                          Text(
+                            todo.description ?? '',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                           Text(
                             DateFormat.yMMMd().add_jm().format(todo.createdAt),
+                          ),
+                          Text(
+                            'Deadline:' +
+                                DateFormat.yMMMd().add_jm().format(
+                                  todo.deadline ?? DateTime.now(),
+                                ),
                           ),
                         ],
                       ),
